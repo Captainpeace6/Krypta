@@ -4,1509 +4,650 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KRYPTAA — Drop 001</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Barlow+Condensed:wght@300;400;600;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700&family=Barlow+Condensed:wght@300;400;600;900&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --black: #060608;
-    --void: #0a0a0d;
-    --surface: #111116;
-    --border: #1e1e26;
-    --accent: #c8ff00;
-    --accent2: #ff3c00;
-    --white: #f0ede8;
-    --muted: #555560;
-    --font-display: 'Bebas Neue', sans-serif;
-    --font-mono: 'Space Mono', monospace;
-    --font-body: 'Barlow Condensed', sans-serif;
-  }
+:root {
+  --black: #060608;
+  --void: #0a0a0d;
+  --surface: #111116;
+  --border: #1e1e26;
+  --accent: #c8ff00;
+  --purple: #7c3aed;
+  --purple-light: #a78bfa;
+  --white: #f0ede8;
+  --muted: #555560;
+  --red: #ff3c00;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--black); color:var(--white); font-family:'Barlow Condensed',sans-serif; overflow-x:hidden; }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+/* NAV */
+nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:18px 40px; background:rgba(6,6,8,0.97); border-bottom:1px solid var(--border); }
+.nav-logo { display:flex; align-items:center; text-decoration:none; }
+.nav-logo img { height:52px; width:auto; object-fit:contain; filter:drop-shadow(0 0 8px rgba(212,165,0,0.3)); transition:filter 0.3s; }
+.nav-logo img:hover { filter:drop-shadow(0 0 14px rgba(212,165,0,0.6)); }
+.nav-links { display:flex; gap:28px; list-style:none; }
+.nav-links a { font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); text-decoration:none; }
+.nav-links a:hover { color:var(--accent); }
+.nav-cart { display:flex; align-items:center; gap:8px; font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:0.15em; color:var(--white); background:var(--surface); border:1px solid var(--border); padding:8px 16px; cursor:pointer; }
+.nav-cart:hover { border-color:var(--accent); color:var(--accent); }
+.cart-badge { background:var(--accent); color:var(--black); font-size:0.6rem; width:18px; height:18px; display:flex; align-items:center; justify-content:center; font-weight:700; border-radius:0; }
 
-  html { scroll-behavior: smooth; }
+/* HERO */
+.hero { height:100vh; display:flex; align-items:flex-end; padding:60px 40px; position:relative; overflow:hidden; }
+.hero-bg { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-family:'Bebas Neue',sans-serif; font-size:clamp(100px,18vw,260px); color:transparent; -webkit-text-stroke:1px rgba(200,255,0,0.05); white-space:nowrap; pointer-events:none; letter-spacing:0.05em; }
+.hero-grid { position:absolute; inset:0; background-image:linear-gradient(rgba(200,255,0,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(200,255,0,0.025) 1px,transparent 1px); background-size:80px 80px; }
+.hero-content { position:relative; z-index:2; }
+.hero-tag { font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:0.3em; color:var(--accent); text-transform:uppercase; margin-bottom:14px; }
+.hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(56px,9vw,110px); line-height:0.9; margin-bottom:20px; }
+.hero-title span { color:var(--accent); }
+.hero-sub { font-family:'Barlow Condensed',sans-serif; font-size:0.95rem; font-weight:300; letter-spacing:0.15em; color:var(--muted); text-transform:uppercase; margin-bottom:36px; max-width:380px; }
+.hero-btn { display:inline-block; font-family:'Space Mono',monospace; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--black); background:var(--accent); padding:15px 30px; text-decoration:none; font-weight:700; }
+.hero-btn:hover { background:var(--white); }
 
-  body {
-    background: var(--black);
-    color: var(--white);
-    font-family: var(--font-body);
-    cursor: none;
-    overflow-x: hidden;
-  }
+/* COUNTDOWN */
+.countdown-bar { background:linear-gradient(135deg,#0e0018,#180028); border-top:1px solid var(--purple); border-bottom:1px solid var(--purple); padding:24px 40px; display:flex; align-items:center; justify-content:center; gap:32px; flex-wrap:wrap; }
+.cd-label { font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.3em; color:var(--purple-light); text-transform:uppercase; }
+.cd-timer { display:flex; align-items:center; gap:12px; }
+.cd-unit { text-align:center; }
+.cd-num { font-family:'Bebas Neue',sans-serif; font-size:2.6rem; color:var(--white); display:block; line-height:1; min-width:60px; }
+.cd-lbl { font-family:'Space Mono',monospace; font-size:0.45rem; letter-spacing:0.2em; color:var(--muted); text-transform:uppercase; }
+.cd-sep { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--purple); opacity:0.5; }
+.cd-btn { font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--black); background:var(--purple-light); border:none; padding:11px 22px; cursor:pointer; font-weight:700; }
+.cd-btn:hover { background:var(--accent); }
 
-  /* Custom cursor */
-  .cursor {
-    position: fixed;
-    width: 12px; height: 12px;
-    background: var(--accent);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s, width 0.2s, height 0.2s;
-    mix-blend-mode: exclusion;
-  }
-  .cursor-ring {
-    position: fixed;
-    width: 36px; height: 36px;
-    border: 1px solid var(--accent);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: all 0.15s ease;
-    mix-blend-mode: exclusion;
-    opacity: 0.5;
-  }
-  .cursor.expand { width: 24px; height: 24px; }
+/* TICKER */
+.ticker { background:var(--accent); padding:9px 0; overflow:hidden; white-space:nowrap; }
+.ticker-track { display:inline-flex; animation:scroll 22s linear infinite; }
+.ticker-item { font-family:'Bebas Neue',sans-serif; font-size:0.85rem; letter-spacing:0.2em; color:var(--black); padding:0 36px; }
+@keyframes scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-  /* Noise overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-    opacity: 0.03;
-    pointer-events: none;
-    z-index: 9990;
-  }
+/* PREORDER BANNER */
+.preorder-banner { background:var(--purple); padding:13px 40px; text-align:center; }
+.preorder-banner span { font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.22em; color:#fff; text-transform:uppercase; }
 
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 40px;
-    background: linear-gradient(to bottom, rgba(6,6,8,0.95), transparent);
-    backdrop-filter: blur(2px);
-  }
+/* FILTER */
+.filter-bar { display:flex; justify-content:space-between; align-items:center; padding:20px 40px; border-bottom:1px solid var(--border); position:sticky; top:72px; background:rgba(6,6,8,0.98); z-index:50; gap:12px; flex-wrap:wrap; }
+.filter-tabs { display:flex; gap:4px; }
+.filter-btn { font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); background:none; border:1px solid transparent; padding:7px 14px; cursor:pointer; }
+.filter-btn:hover, .filter-btn.active { color:var(--accent); border-color:var(--accent); }
 
-  .nav-logo {
-    font-family: var(--font-display);
-    font-size: 2.4rem;
-    letter-spacing: 0.15em;
-    color: var(--white);
-    text-decoration: none;
-  }
-  .nav-logo span { color: var(--accent); }
+/* GRID */
+.store { padding:44px 40px 80px; }
+.store-header { display:flex; align-items:baseline; gap:14px; margin-bottom:36px; }
+.store-title { font-family:'Bebas Neue',sans-serif; font-size:2.8rem; letter-spacing:0.05em; }
+.store-count { font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--muted); letter-spacing:0.2em; }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:16px; }
 
-  .nav-links {
-    display: flex;
-    gap: 32px;
-    list-style: none;
-  }
-  .nav-links a {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--accent); }
+/* PRODUCT CARD */
+.card { background:var(--surface); border:1px solid var(--border); overflow:hidden; transition:border-color 0.25s, transform 0.25s; }
+.card:hover { border-color:var(--accent); transform:translateY(-3px); }
+.card-img { position:relative; aspect-ratio:3/4; background:#0d0d0d; overflow:hidden; }
+.card-img img { width:100%; height:100%; object-fit:cover; object-position:center top; display:block; transition:transform 0.5s; }
+.card:hover .card-img img { transform:scale(1.04); }
+.card-img-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; opacity:0.1; }
+.card-img-placeholder svg { width:55%; height:55%; }
+.card-badge { position:absolute; top:12px; left:12px; background:var(--purple); color:#fff; font-family:'Space Mono',monospace; font-size:0.55rem; letter-spacing:0.18em; padding:4px 9px; font-weight:700; }
+.card-overlay { position:absolute; inset:0; background:rgba(6,6,8,0.88); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; opacity:0; transition:opacity 0.25s; padding:20px; }
+.card:hover .card-overlay { opacity:1; }
+.btn-preorder { width:100%; background:var(--purple); color:#fff; border:none; padding:12px; font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:0.18em; text-transform:uppercase; font-weight:700; cursor:pointer; }
+.btn-preorder:hover { background:var(--accent); color:var(--black); }
+.btn-qv { width:100%; background:none; color:var(--muted); border:1px solid var(--border); padding:9px; font-family:'Space Mono',monospace; font-size:0.58rem; letter-spacing:0.15em; text-transform:uppercase; cursor:pointer; }
+.btn-qv:hover { border-color:var(--white); color:var(--white); }
+.card-info { padding:14px 16px 18px; }
+.card-cat { font-family:'Space Mono',monospace; font-size:0.5rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--purple-light); margin-bottom:5px; }
+.card-name { font-family:'Barlow Condensed',sans-serif; font-size:1.1rem; font-weight:900; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px; }
+.card-price { font-family:'Bebas Neue',sans-serif; font-size:1.35rem; color:var(--purple-light); }
 
-  .nav-cart {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    color: var(--white);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 8px 16px;
-    transition: all 0.2s;
-  }
-  .nav-cart:hover { border-color: var(--accent); color: var(--accent); }
-  .cart-count {
-    background: var(--accent);
-    color: var(--black);
-    font-size: 0.6rem;
-    width: 18px; height: 18px;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700;
-  }
+/* QUICK VIEW */
+.qv-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:500; align-items:center; justify-content:center; padding:20px; }
+.qv-bg.open { display:flex; }
+.qv-box { background:var(--void); border:1px solid var(--border); width:100%; max-width:860px; display:grid; grid-template-columns:1fr 1fr; position:relative; max-height:90vh; overflow-y:auto; }
+.qv-close { position:absolute; top:14px; right:14px; background:var(--surface); border:1px solid var(--border); color:var(--muted); width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1rem; z-index:5; }
+.qv-close:hover { color:var(--white); border-color:var(--white); }
+.qv-left { background:var(--surface); min-height:380px; position:relative; overflow:hidden; }
+.qv-left img { width:100%; height:100%; object-fit:cover; object-position:center top; display:block; }
+.qv-left-empty { width:100%; height:380px; display:flex; align-items:center; justify-content:center; opacity:0.08; }
+.qv-left-empty svg { width:50%; height:50%; }
+.qv-right { padding:32px 28px; display:flex; flex-direction:column; gap:18px; }
+.qv-badge { display:inline-block; background:var(--purple); color:#fff; font-family:'Space Mono',monospace; font-size:0.55rem; letter-spacing:0.18em; padding:4px 10px; font-weight:700; }
+.qv-name { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:0.05em; line-height:1; }
+.qv-price { font-family:'Bebas Neue',sans-serif; font-size:2.4rem; color:var(--purple-light); }
+.qv-desc { font-family:'Space Mono',monospace; font-size:0.58rem; color:var(--muted); letter-spacing:0.08em; line-height:1.8; }
+.qv-size-title { font-family:'Space Mono',monospace; font-size:0.58rem; letter-spacing:0.22em; color:var(--muted); text-transform:uppercase; margin-bottom:8px; }
+.qv-sizes { display:flex; gap:7px; flex-wrap:wrap; }
+.qv-size { font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.12em; color:var(--muted); border:1px solid var(--border); padding:7px 13px; background:none; cursor:pointer; }
+.qv-size:hover, .qv-size.picked { border-color:var(--accent); color:var(--accent); }
+.qv-add { background:var(--purple); color:#fff; border:none; padding:15px; font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; font-weight:700; cursor:pointer; width:100%; }
+.qv-add:hover { background:var(--accent); color:var(--black); }
+.qv-note { font-family:'Space Mono',monospace; font-size:0.52rem; letter-spacing:0.12em; color:var(--muted); text-align:center; }
 
-  /* HERO BANNER */
-  .hero {
-    height: 100vh;
-    display: flex;
-    align-items: flex-end;
-    padding: 60px 40px;
-    position: relative;
-    overflow: hidden;
-    background: var(--black);
-  }
+/* CART */
+.cart-bg { position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:199; display:none; }
+.cart-bg.open { display:block; }
+.cart-panel { position:fixed; right:-100%; top:0; bottom:0; width:380px; background:var(--void); border-left:1px solid var(--border); z-index:200; transition:right 0.38s cubic-bezier(0.4,0,0.2,1); display:flex; flex-direction:column; padding:28px; }
+.cart-panel.open { right:0; }
+.cart-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:28px; }
+.cart-head-title { font-family:'Bebas Neue',sans-serif; font-size:1.7rem; letter-spacing:0.1em; }
+.cart-x { background:none; border:none; color:var(--muted); font-size:1.1rem; cursor:pointer; }
+.cart-x:hover { color:var(--white); }
+.cart-list { flex:1; overflow-y:auto; }
+.cart-empty { font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--muted); letter-spacing:0.2em; text-transform:uppercase; text-align:center; padding-top:50px; }
+.cart-row { display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--border); }
+.cart-thumb { width:72px; height:90px; background:var(--surface); flex-shrink:0; overflow:hidden; }
+.cart-thumb img { width:100%; height:100%; object-fit:cover; }
+.cart-info { flex:1; }
+.cart-rname { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:0.88rem; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:3px; }
+.cart-rmeta { font-family:'Space Mono',monospace; font-size:0.52rem; color:var(--muted); letter-spacing:0.1em; margin-bottom:10px; }
+.cart-qty { display:flex; align-items:center; gap:10px; }
+.qty-b { background:var(--surface); border:1px solid var(--border); color:var(--white); width:22px; height:22px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:0.75rem; }
+.qty-b:hover { border-color:var(--accent); color:var(--accent); }
+.qty-n { font-family:'Space Mono',monospace; font-size:0.7rem; min-width:18px; text-align:center; }
+.cart-rprice { font-family:'Bebas Neue',sans-serif; font-size:1.15rem; color:var(--purple-light); align-self:flex-start; padding-top:3px; }
+.cart-foot { padding-top:20px; }
+.cart-total-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+.cart-total-lbl { font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.2em; color:var(--muted); text-transform:uppercase; }
+.cart-total-val { font-family:'Bebas Neue',sans-serif; font-size:1.7rem; }
+.cart-checkout { width:100%; background:var(--purple); color:#fff; border:none; padding:15px; font-family:'Space Mono',monospace; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; font-weight:700; cursor:pointer; }
+.cart-checkout:hover { background:var(--accent); color:var(--black); }
 
-  .hero-bg-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: var(--font-display);
-    font-size: clamp(120px, 20vw, 280px);
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(200,255,0,0.06);
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-    pointer-events: none;
-    user-select: none;
-    animation: bgDrift 20s ease-in-out infinite alternate;
-  }
-  @keyframes bgDrift {
-    from { transform: translate(-50%, -50%) scale(1); }
-    to { transform: translate(-50%, -50%) scale(1.05); }
-  }
+/* STICKY MOBILE CART */
+.sticky-bar { display:none; position:fixed; bottom:0; left:0; right:0; background:rgba(10,10,13,0.97); border-top:1px solid var(--purple); padding:12px 20px; z-index:150; align-items:center; justify-content:space-between; }
+.sticky-left { display:flex; flex-direction:column; }
+.sticky-cnt { font-family:'Space Mono',monospace; font-size:0.55rem; letter-spacing:0.18em; color:var(--muted); text-transform:uppercase; }
+.sticky-total { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; }
+.sticky-view { background:var(--purple); color:#fff; border:none; padding:10px 22px; font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.18em; text-transform:uppercase; font-weight:700; cursor:pointer; }
+.sticky-view:hover { background:var(--accent); color:var(--black); }
 
-  .hero-grid-lines {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(200,255,0,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(200,255,0,0.03) 1px, transparent 1px);
-    background-size: 80px 80px;
-  }
+/* SIZE MODAL */
+.size-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index:400; align-items:center; justify-content:center; }
+.size-bg.open { display:flex; }
+.size-box { background:var(--void); border:1px solid var(--border); width:90%; max-width:560px; padding:36px; position:relative; }
+.size-close { position:absolute; top:16px; right:16px; background:none; border:none; color:var(--muted); font-size:1.1rem; cursor:pointer; }
+.size-close:hover { color:var(--white); }
+.size-title { font-family:'Bebas Neue',sans-serif; font-size:1.9rem; letter-spacing:0.1em; margin-bottom:6px; }
+.size-sub { font-family:'Space Mono',monospace; font-size:0.55rem; color:var(--muted); letter-spacing:0.18em; text-transform:uppercase; margin-bottom:24px; }
+.size-tbl { width:100%; border-collapse:collapse; }
+.size-tbl th { font-family:'Space Mono',monospace; font-size:0.55rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); text-align:left; padding:9px 10px; border-bottom:1px solid var(--border); }
+.size-tbl td { font-family:'Barlow Condensed',sans-serif; font-size:0.88rem; padding:9px 10px; border-bottom:1px solid var(--border); color:var(--white); font-weight:300; }
+.size-tbl tr:hover td { background:var(--surface); }
+.size-note { font-family:'Space Mono',monospace; font-size:0.52rem; color:var(--muted); letter-spacing:0.08em; margin-top:14px; line-height:1.7; }
 
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    max-width: 700px;
-  }
+/* NEWSLETTER */
+.newsletter { padding:80px 40px; text-align:center; position:relative; overflow:hidden; }
+.newsletter::before { content:'JOIN'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-family:'Bebas Neue',sans-serif; font-size:clamp(70px,14vw,190px); color:transparent; -webkit-text-stroke:1px rgba(200,255,0,0.035); pointer-events:none; white-space:nowrap; }
+.nl-tag { font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.28em; color:var(--accent); text-transform:uppercase; margin-bottom:14px; }
+.nl-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.8rem,4.5vw,3.6rem); letter-spacing:0.05em; margin-bottom:10px; }
+.nl-sub { font-family:'Barlow Condensed',sans-serif; font-size:0.9rem; color:var(--muted); letter-spacing:0.1em; font-weight:300; margin-bottom:32px; }
+.nl-form { display:flex; max-width:480px; margin:0 auto; }
+.nl-input { flex:1; background:var(--surface); border:1px solid var(--border); border-right:none; color:var(--white); font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:0.1em; padding:14px 18px; outline:none; }
+.nl-input:focus { border-color:var(--accent); }
+.nl-input::placeholder { color:var(--muted); }
+.nl-btn { background:var(--accent); color:var(--black); border:none; padding:14px 24px; font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.18em; text-transform:uppercase; font-weight:700; cursor:pointer; white-space:nowrap; }
+.nl-btn:hover { background:var(--white); }
+.nl-ok { display:none; font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:0.2em; color:var(--accent); text-transform:uppercase; margin-top:14px; }
 
-  .hero-tag {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .hero-tag::before {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 1px;
-    background: var(--accent);
-  }
+/* FOLLOW BAR */
+.follow-bar { background:var(--surface); border-top:1px solid var(--border); padding:18px 40px; display:flex; align-items:center; justify-content:center; gap:20px; flex-wrap:wrap; }
+.follow-lbl { font-family:'Space Mono',monospace; font-size:0.55rem; letter-spacing:0.28em; color:var(--muted); text-transform:uppercase; }
+.follow-link { display:flex; align-items:center; gap:7px; font-family:'Space Mono',monospace; font-size:0.58rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); background:var(--void); border:1px solid var(--border); padding:7px 14px; text-decoration:none; }
+.follow-link:hover { border-color:var(--accent); color:var(--accent); }
+.follow-link svg { width:13px; height:13px; fill:currentColor; }
+.copy-btn { display:flex; align-items:center; gap:7px; font-family:'Space Mono',monospace; font-size:0.58rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); background:var(--void); border:1px solid var(--border); padding:7px 14px; cursor:pointer; }
+.copy-btn:hover { border-color:var(--accent); color:var(--accent); }
+.copy-btn svg { width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; }
 
-  .hero-title {
-    font-family: var(--font-display);
-    font-size: clamp(60px, 10vw, 120px);
-    line-height: 0.9;
-    letter-spacing: 0.02em;
-    margin-bottom: 24px;
-  }
-  .hero-title .line2 { color: var(--accent); }
+/* FOOTER */
+footer { border-top:1px solid var(--border); padding:44px 40px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:36px; margin-top:60px; }
+.ft-logo { font-family:'Bebas Neue',sans-serif; font-size:1.9rem; letter-spacing:0.15em; margin-bottom:10px; }
+.ft-logo span { color:var(--accent); }
+.ft-desc { font-family:'Barlow Condensed',sans-serif; font-size:0.82rem; color:var(--muted); font-weight:300; line-height:1.6; letter-spacing:0.05em; max-width:240px; }
+.ft-socials { display:flex; gap:10px; margin-top:16px; }
+.ft-social { font-family:'Space Mono',monospace; font-size:0.55rem; letter-spacing:0.14em; color:var(--muted); text-decoration:none; border:1px solid var(--border); padding:5px 11px; }
+.ft-social:hover { color:var(--accent); border-color:var(--accent); }
+.ft-col h4 { font-family:'Space Mono',monospace; font-size:0.55rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--muted); margin-bottom:14px; }
+.ft-col ul { list-style:none; }
+.ft-col ul li { margin-bottom:9px; }
+.ft-col ul li a { font-family:'Barlow Condensed',sans-serif; font-size:0.88rem; color:var(--white); text-decoration:none; letter-spacing:0.07em; font-weight:600; text-transform:uppercase; }
+.ft-col ul li a:hover { color:var(--accent); }
+.ft-bottom { border-top:1px solid var(--border); padding:18px 40px; display:flex; justify-content:space-between; align-items:center; }
+.ft-bottom p { font-family:'Space Mono',monospace; font-size:0.55rem; letter-spacing:0.18em; color:var(--muted); text-transform:uppercase; }
 
-  .hero-sub {
-    font-family: var(--font-body);
-    font-size: 1rem;
-    font-weight: 300;
-    letter-spacing: 0.15em;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 40px;
-    max-width: 400px;
-  }
+/* TOAST */
+.toast { position:fixed; bottom:70px; left:50%; transform:translateX(-50%) translateY(70px); background:var(--accent); color:var(--black); font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.18em; text-transform:uppercase; font-weight:700; padding:12px 26px; z-index:9999; transition:transform 0.38s cubic-bezier(0.34,1.56,0.64,1); pointer-events:none; white-space:nowrap; }
+.toast.show { transform:translateX(-50%) translateY(0); }
 
-  .hero-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 16px;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--black);
-    background: var(--accent);
-    padding: 16px 32px;
-    text-decoration: none;
-    font-weight: 700;
-    transition: all 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero-cta::after {
-    content: '→';
-    transition: transform 0.2s;
-  }
-  .hero-cta:hover { background: var(--white); }
-  .hero-cta:hover::after { transform: translateX(4px); }
-
-  .hero-drop-info {
-    position: absolute;
-    right: 40px;
-    bottom: 60px;
-    text-align: right;
-  }
-  .hero-drop-info .label {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.3em;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 4px;
-  }
-  .hero-drop-info .value {
-    font-family: var(--font-display);
-    font-size: 1.8rem;
-    color: var(--white);
-    letter-spacing: 0.1em;
-  }
-
-  /* TICKER */
-  .ticker {
-    background: var(--accent);
-    padding: 10px 0;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .ticker-inner {
-    display: inline-flex;
-    animation: ticker 20s linear infinite;
-  }
-  .ticker-item {
-    font-family: var(--font-display);
-    font-size: 0.9rem;
-    letter-spacing: 0.2em;
-    color: var(--black);
-    padding: 0 40px;
-  }
-  .ticker-sep { color: var(--black); opacity: 0.4; }
-  @keyframes ticker {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-
-  /* FILTER BAR */
-  .filter-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 24px 40px;
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 72px;
-    background: rgba(6,6,8,0.95);
-    backdrop-filter: blur(10px);
-    z-index: 50;
-  }
-
-  .filter-tabs {
-    display: flex;
-    gap: 4px;
-  }
-  .filter-tab {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    background: none;
-    border: 1px solid transparent;
-    padding: 8px 16px;
-    cursor: none;
-    transition: all 0.2s;
-  }
-  .filter-tab:hover, .filter-tab.active {
-    color: var(--accent);
-    border-color: var(--accent);
-  }
-
-  .sort-select {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    color: var(--muted);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 8px 16px;
-    cursor: none;
-    appearance: none;
-    outline: none;
-  }
-
-  /* PRODUCT GRID */
-  .store-section {
-    padding: 48px 40px 80px;
-  }
-
-  .section-header {
-    display: flex;
-    align-items: baseline;
-    gap: 16px;
-    margin-bottom: 40px;
-  }
-  .section-title {
-    font-family: var(--font-display);
-    font-size: 3rem;
-    letter-spacing: 0.05em;
-  }
-  .section-count {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    color: var(--muted);
-    letter-spacing: 0.2em;
-  }
-
-  .product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2px;
-  }
-
-  .product-card {
-    background: var(--surface);
-    position: relative;
-    overflow: hidden;
-    cursor: none;
-    transition: transform 0.3s ease;
-    border: 1px solid var(--border);
-  }
-  .product-card:hover { transform: translateY(-4px); border-color: var(--accent); z-index: 2; }
-
-  .product-image {
-    aspect-ratio: 3/4;
-    background: var(--void);
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* Placeholder product visuals */
-  .product-image .img-placeholder {
-    width: 100%; height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-
-  .product-image .img-placeholder svg {
-    width: 60%;
-    height: 60%;
-    opacity: 0.08;
-  }
-
-  .product-image .product-label {
-    position: absolute;
-    top: 16px; left: 16px;
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    font-weight: 700;
-  }
-  .label-new { background: var(--accent); color: var(--black); }
-  .label-limited { background: var(--accent2); color: var(--white); }
-  .label-sold { background: var(--muted); color: var(--black); opacity: 0.7; }
-
-  .product-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(6,6,8,0.85);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  .product-card:hover .product-overlay { opacity: 1; }
-
-  .btn-add-cart {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--black);
-    background: var(--accent);
-    border: none;
-    padding: 12px 28px;
-    cursor: none;
-    font-weight: 700;
-    transition: background 0.2s;
-    width: 80%;
-  }
-  .btn-add-cart:hover { background: var(--white); }
-
-  .btn-quick-view {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--white);
-    background: transparent;
-    border: 1px solid rgba(240,237,232,0.3);
-    padding: 10px 28px;
-    cursor: none;
-    width: 80%;
-    transition: border-color 0.2s;
-  }
-  .btn-quick-view:hover { border-color: var(--white); }
-
-  .product-info {
-    padding: 16px 20px 20px;
-  }
-  .product-category {
-    font-family: var(--font-mono);
-    font-size: 0.55rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 6px;
-  }
-  .product-name {
-    font-family: var(--font-body);
-    font-size: 1.1rem;
-    font-weight: 900;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    color: var(--white);
-  }
-  .product-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .product-price {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    color: var(--accent);
-    letter-spacing: 0.05em;
-  }
-  .product-sizes {
-    display: flex;
-    gap: 4px;
-  }
-  .size-dot {
-    width: 6px; height: 6px;
-    background: var(--border);
-    border-radius: 50%;
-  }
-  .size-dot.avail { background: var(--muted); }
-
-  /* SVG product art */
-  .hoodie-art { fill: none; stroke: var(--white); stroke-width: 1.5; }
-  .tee-art { fill: none; stroke: var(--white); stroke-width: 1.5; }
-
-  /* FEATURED STRIP */
-  .featured-strip {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2px;
-    margin: 0 0 2px;
-  }
-  .featured-item {
-    height: 300px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: flex-end;
-    padding: 28px;
-    position: relative;
-    overflow: hidden;
-    cursor: none;
-    transition: border-color 0.3s;
-  }
-  .featured-item:hover { border-color: var(--accent); }
-  .featured-item:first-child { grid-column: span 2; height: 400px; }
-  .featured-bg-num {
-    position: absolute;
-    top: -20px; right: 20px;
-    font-family: var(--font-display);
-    font-size: 200px;
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(200,255,0,0.04);
-    pointer-events: none;
-    user-select: none;
-  }
-  .featured-content .tag {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.25em;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-  .featured-content .name {
-    font-family: var(--font-display);
-    font-size: 2.5rem;
-    letter-spacing: 0.05em;
-    margin-bottom: 4px;
-  }
-  .featured-content .price {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
-
-  /* FOOTER */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 48px 40px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 40px;
-    margin-top: 80px;
-  }
-  .footer-brand .logo {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    letter-spacing: 0.15em;
-    margin-bottom: 12px;
-  }
-  .footer-brand .logo span { color: var(--accent); }
-  .footer-brand p {
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    color: var(--muted);
-    font-weight: 300;
-    line-height: 1.6;
-    letter-spacing: 0.05em;
-    max-width: 260px;
-  }
-  .footer-col h4 {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 16px;
-  }
-  .footer-col ul { list-style: none; }
-  .footer-col ul li { margin-bottom: 10px; }
-  .footer-col ul li a {
-    font-family: var(--font-body);
-    font-size: 0.9rem;
-    color: var(--white);
-    text-decoration: none;
-    letter-spacing: 0.08em;
-    font-weight: 600;
-    text-transform: uppercase;
-    transition: color 0.2s;
-  }
-  .footer-col ul li a:hover { color: var(--accent); }
-  .footer-bottom {
-    border-top: 1px solid var(--border);
-    padding: 20px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .footer-bottom p {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-
-  /* CART SIDEBAR */
-  .cart-sidebar {
-    position: fixed;
-    right: -420px;
-    top: 0; bottom: 0;
-    width: 400px;
-    background: var(--void);
-    border-left: 1px solid var(--border);
-    z-index: 200;
-    transition: right 0.4s cubic-bezier(0.4,0,0.2,1);
-    display: flex;
-    flex-direction: column;
-    padding: 32px;
-  }
-  .cart-sidebar.open { right: 0; }
-  .cart-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    z-index: 199;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s;
-  }
-  .cart-overlay.show { opacity: 1; pointer-events: all; }
-  .cart-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-  }
-  .cart-title {
-    font-family: var(--font-display);
-    font-size: 1.8rem;
-    letter-spacing: 0.1em;
-  }
-  .cart-close {
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-size: 1.2rem;
-    cursor: none;
-    transition: color 0.2s;
-  }
-  .cart-close:hover { color: var(--white); }
-  .cart-items { flex: 1; overflow-y: auto; }
-  .cart-item {
-    display: flex;
-    gap: 16px;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .cart-item-img {
-    width: 80px; height: 100px;
-    background: var(--surface);
-    flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .cart-item-img svg { width: 50px; opacity: 0.3; }
-  .cart-item-details { flex: 1; }
-  .cart-item-name {
-    font-family: var(--font-body);
-    font-weight: 900;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 4px;
-  }
-  .cart-item-meta {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    color: var(--muted);
-    letter-spacing: 0.15em;
-    margin-bottom: 12px;
-  }
-  .cart-item-qty {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .qty-btn {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--white);
-    width: 24px; height: 24px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: none;
-    font-size: 0.8rem;
-    transition: border-color 0.2s;
-  }
-  .qty-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .qty-val {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    min-width: 20px; text-align: center;
-  }
-  .cart-item-price {
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    color: var(--accent);
-    align-self: flex-start;
-    padding-top: 4px;
-  }
-  .cart-footer { padding-top: 24px; }
-  .cart-total {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  .cart-total-label {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .cart-total-val {
-    font-family: var(--font-display);
-    font-size: 1.8rem;
-    color: var(--white);
-  }
-  .btn-checkout {
-    width: 100%;
-    background: var(--accent);
-    color: var(--black);
-    border: none;
-    padding: 16px;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    font-weight: 700;
-    cursor: none;
-    transition: background 0.2s;
-  }
-  .btn-checkout:hover { background: var(--white); }
-
-  /* Animations */
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.6s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* LOOKBOOK */
-  .lookbook-section {
-    padding: 80px 40px;
-    background: var(--void);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-  }
-  .lookbook-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    grid-template-rows: 280px 280px;
-    gap: 2px;
-    margin-top: 40px;
-  }
-  .look-item {
-    position: relative;
-    overflow: hidden;
-    cursor: none;
-  }
-  .look-item:first-child { grid-row: span 2; }
-  .look-bg {
-    width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
-    transition: transform 0.5s ease;
-  }
-  .look-item:hover .look-bg { transform: scale(1.04); }
-  .look-bg svg { width: 40%; height: 40%; opacity: 0.12; }
-  .look-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(6,6,8,0.9) 0%, transparent 60%);
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
-  .look-tag {
-    font-family: var(--font-mono);
-    font-size: 0.55rem;
-    letter-spacing: 0.3em;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin-bottom: 4px;
-  }
-  .look-name {
-    font-family: var(--font-display);
-    font-size: 1.6rem;
-    letter-spacing: 0.05em;
-  }
-
-  /* SIZE GUIDE MODAL */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 300;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
-  }
-  .modal-overlay.show { opacity: 1; pointer-events: all; }
-  .modal-box {
-    background: var(--void);
-    border: 1px solid var(--border);
-    width: 90%;
-    max-width: 600px;
-    padding: 40px;
-    position: relative;
-    transform: translateY(20px);
-    transition: transform 0.3s;
-  }
-  .modal-overlay.show .modal-box { transform: translateY(0); }
-  .modal-close {
-    position: absolute;
-    top: 20px; right: 20px;
-    background: none; border: none;
-    color: var(--muted); font-size: 1.2rem;
-    cursor: none; transition: color 0.2s;
-  }
-  .modal-close:hover { color: var(--white); }
-  .modal-title {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    letter-spacing: 0.1em;
-    margin-bottom: 8px;
-  }
-  .modal-sub {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    color: var(--muted);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-bottom: 28px;
-  }
-  .size-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  .size-table th {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--accent);
-    text-align: left;
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--border);
-  }
-  .size-table td {
-    font-family: var(--font-body);
-    font-size: 0.9rem;
-    color: var(--white);
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--border);
-    font-weight: 300;
-    letter-spacing: 0.05em;
-  }
-  .size-table tr:hover td { background: var(--surface); }
-  .size-note {
-    font-family: var(--font-mono);
-    font-size: 0.58rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    margin-top: 16px;
-    line-height: 1.6;
-  }
-
-  /* NEWSLETTER */
-  .newsletter-section {
-    padding: 80px 40px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .newsletter-section::before {
-    content: 'JOIN';
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: var(--font-display);
-    font-size: clamp(80px, 15vw, 200px);
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(200,255,0,0.04);
-    pointer-events: none;
-    white-space: nowrap;
-  }
-  .newsletter-tag {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-  .newsletter-title {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 5vw, 4rem);
-    letter-spacing: 0.05em;
-    margin-bottom: 12px;
-  }
-  .newsletter-sub {
-    font-family: var(--font-body);
-    font-size: 0.9rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    font-weight: 300;
-    margin-bottom: 36px;
-  }
-  .newsletter-form {
-    display: flex;
-    max-width: 500px;
-    margin: 0 auto;
-    gap: 0;
-    position: relative;
-  }
-  .newsletter-input {
-    flex: 1;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-right: none;
-    color: var(--white);
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    padding: 16px 20px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .newsletter-input:focus { border-color: var(--accent); }
-  .newsletter-input::placeholder { color: var(--muted); }
-  .newsletter-btn {
-    background: var(--accent);
-    color: var(--black);
-    border: none;
-    padding: 16px 28px;
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    font-weight: 700;
-    cursor: none;
-    transition: background 0.2s;
-    white-space: nowrap;
-  }
-  .newsletter-btn:hover { background: var(--white); }
-  .newsletter-success {
-    display: none;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin-top: 16px;
-  }
-
-  /* SOCIAL SHARE BAR */
-  .share-bar {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    padding: 20px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
-    flex-wrap: wrap;
-  }
-  .share-label {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.3em;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-  .share-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--white);
-    background: var(--void);
-    border: 1px solid var(--border);
-    padding: 8px 16px;
-    cursor: none;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-  .share-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .share-btn svg { width: 14px; height: 14px; fill: currentColor; }
-
-  /* TOAST */
-  .toast {
-    position: fixed;
-    bottom: 32px; left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: var(--accent);
-    color: var(--black);
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    font-weight: 700;
-    padding: 14px 28px;
-    z-index: 9999;
-    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
-    pointer-events: none;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-
-  @media (max-width: 768px) {
-    nav { padding: 16px 20px; }
-    .nav-links { display: none; }
-    .hero { padding: 40px 20px; }
-    .filter-bar { padding: 16px 20px; overflow-x: auto; }
-    .store-section { padding: 32px 20px; }
-    .featured-strip { grid-template-columns: 1fr; }
-    .featured-item:first-child { grid-column: span 1; }
-    footer { grid-template-columns: 1fr; padding: 32px 20px; }
-    .footer-bottom { padding: 16px 20px; flex-direction: column; gap: 8px; }
-    .product-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
-    .cart-sidebar { width: 100%; right: -100%; }
-    body { cursor: auto; }
-    .cursor, .cursor-ring { display: none; }
-    .lookbook-section { padding: 48px 20px; }
-    .lookbook-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
-    .look-item:first-child { grid-column: span 2; height: 260px; }
-    .look-item { height: 200px; }
-    .newsletter-section { padding: 60px 20px; }
-    .newsletter-form { flex-direction: column; }
-    .newsletter-input { border-right: 1px solid var(--border); border-bottom: none; }
-    .share-bar { padding: 20px; gap: 12px; }
-    .modal-box { padding: 28px 20px; }
-  }
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav { padding:14px 18px; }
+  .nav-links { display:none; }
+  .hero { padding:36px 18px; }
+  .store { padding:28px 18px 90px; }
+  .grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+  .filter-bar { padding:14px 18px; }
+  footer { grid-template-columns:1fr; padding:28px 18px; }
+  .ft-bottom { padding:14px 18px; flex-direction:column; gap:6px; text-align:center; }
+  .cart-panel { width:100%; right:-100%; }
+  .sticky-bar { display:flex; }
+  .nl-form { flex-direction:column; }
+  .nl-input { border-right:1px solid var(--border); border-bottom:none; }
+  .countdown-bar { padding:18px; gap:18px; }
+  .qv-box { grid-template-columns:1fr; }
+  .follow-bar { padding:18px; gap:12px; }
+}
 </style>
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<!-- CART BACKDROP -->
+<div class="cart-bg" id="cartBg" onclick="closeCart()"></div>
 
-<!-- Cart Overlay -->
-<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
-
-<!-- Cart Sidebar -->
-<div class="cart-sidebar" id="cartSidebar">
-  <div class="cart-header">
-    <div class="cart-title">BAG</div>
-    <button class="cart-close" onclick="toggleCart()">✕</button>
+<!-- CART PANEL -->
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-head">
+    <div class="cart-head-title">YOUR BAG</div>
+    <button class="cart-x" onclick="closeCart()">✕</button>
   </div>
-  <div class="cart-items" id="cartItems">
-    <p style="font-family:var(--font-mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.2em;text-transform:uppercase;padding-top:40px;text-align:center;">YOUR BAG IS EMPTY</p>
+  <div class="cart-list" id="cartList">
+    <div class="cart-empty">Your bag is empty</div>
   </div>
-  <div class="cart-footer">
-    <div class="cart-total">
-      <span class="cart-total-label">Total</span>
-      <span class="cart-total-val" id="cartTotal">$0</span>
+  <div class="cart-foot">
+    <div class="cart-total-row">
+      <span class="cart-total-lbl">Total</span>
+      <span class="cart-total-val" id="cartTotalVal">$0</span>
     </div>
-    <button class="btn-checkout">Checkout →</button>
+    <button class="cart-checkout">Checkout →</button>
   </div>
 </div>
 
+<!-- STICKY MOBILE CART -->
+<div class="sticky-bar" id="stickyBar">
+  <div class="sticky-left">
+    <span class="sticky-cnt" id="stickyCnt">0 items</span>
+    <span class="sticky-total" id="stickyTotal">$0</span>
+  </div>
+  <button class="sticky-view" onclick="openCart()">View Bag →</button>
+</div>
+
+<!-- QUICK VIEW -->
+<div class="qv-bg" id="qvBg">
+  <div class="qv-box" id="qvBox">
+    <button class="qv-close" onclick="closeQV()">✕</button>
+    <div class="qv-left" id="qvLeft"></div>
+    <div class="qv-right" id="qvRight"></div>
+  </div>
+</div>
+
+<!-- SIZE GUIDE -->
+<div class="size-bg" id="sizeBg">
+  <div class="size-box">
+    <button class="size-close" onclick="closeSizeGuide()">✕</button>
+    <div class="size-title">SIZE GUIDE</div>
+    <div class="size-sub">All measurements in inches — fits are oversized</div>
+    <table class="size-tbl">
+      <thead><tr><th>Size</th><th>Chest</th><th>Length</th><th>Shoulder</th><th>Sleeve</th></tr></thead>
+      <tbody>
+        <tr><td>XS</td><td>38-40"</td><td>26"</td><td>17"</td><td>32"</td></tr>
+        <tr><td>S</td><td>40-42"</td><td>27"</td><td>18"</td><td>33"</td></tr>
+        <tr><td>M</td><td>42-44"</td><td>28"</td><td>19"</td><td>34"</td></tr>
+        <tr><td>L</td><td>44-46"</td><td>29"</td><td>20"</td><td>35"</td></tr>
+        <tr><td>XL</td><td>46-48"</td><td>30"</td><td>21"</td><td>36"</td></tr>
+        <tr><td>XXL</td><td>48-50"</td><td>31"</td><td>22"</td><td>37"</td></tr>
+      </tbody>
+    </table>
+    <p class="size-note">Kryptaa pieces are intentionally oversized. If between sizes, size down. Wash cold, hang dry.</p>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">KRYP<span>T</span>AA</a>
+  <a href="#" class="nav-logo"><img src="imgs/logo.png" alt="KRYPTAA"></a>
   <ul class="nav-links">
     <li><a href="#store">Store</a></li>
-    <li><a href="#">Lookbook</a></li>
-    <li><a href="#">About</a></li>
-    <li><a href="#">Drops</a></li>
+    <li><a href="#newsletter">Drops</a></li>
+    <li><a href="#" onclick="openSizeGuide();return false;">Size Guide</a></li>
   </ul>
-  <button class="nav-cart" onclick="toggleCart()">
-    BAG <span class="cart-count" id="cartCount">0</span>
+  <button class="nav-cart" onclick="openCart()">
+    BAG <span class="cart-badge" id="cartBadge">0</span>
   </button>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-grid-lines"></div>
-  <div class="hero-bg-text">KRYPTAA</div>
-  <div class="hero-content reveal">
-    <div class="hero-tag">Drop 001 — Now Live</div>
-    <h1 class="hero-title">
-      WEAR THE<br>
-      <span class="line2">VOID</span>
-    </h1>
+  <div class="hero-grid"></div>
+  <div class="hero-bg">KRYPTAA</div>
+  <div class="hero-content">
+    <div class="hero-tag">Drop 001 — Pre-Order Now Open</div>
+    <img src="imgs/logo.png" alt="KRYPTAA" style="height:120px;width:auto;object-fit:contain;filter:drop-shadow(0 0 20px rgba(212,165,0,0.4));margin-bottom:20px;display:block;">
+    <h1 class="hero-title">WEAR THE<br><span>VOID</span></h1>
     <p class="hero-sub">Streetwear born from the shadows. Crafted for those who move in silence.</p>
-    <a href="#store" class="hero-cta">Shop The Drop</a>
-  </div>
-  <div class="hero-drop-info reveal">
-    <div class="label">Items in Drop</div>
-    <div class="value">12</div>
-    <div class="label" style="margin-top:12px">Limited Qty</div>
-    <div class="value" style="color:var(--accent2)">SLD OUT SOON</div>
+    <a href="#store" class="hero-btn">Shop The Drop →</a>
   </div>
 </section>
 
 <!-- TICKER -->
 <div class="ticker">
-  <div class="ticker-inner">
-    <span class="ticker-item">NEW DROP 001</span><span class="ticker-sep">✦</span>
-    <span class="ticker-item">LIMITED PIECES</span><span class="ticker-sep">✦</span>
-    <span class="ticker-item">FREE SHIPPING OVER $150</span><span class="ticker-sep">✦</span>
-    <span class="ticker-item">KRYPTAA SS25</span><span class="ticker-sep">✦</span>
-    <span class="ticker-item">WEAR THE VOID</span><span class="ticker-sep">✦</span>
-    <span class="ticker-item">NEW DROP 001</span><span class="ticker-sep">✦</span>
-    <span class="ticker-item">LIMITED PIECES</span><span class="ticker-sep">✦</span>
-    <span class="ticker-item">FREE SHIPPING OVER $150</span><span class="ticker-sep">✦</span>
-    <span class="ticker-item">KRYPTAA SS25</span><span class="ticker-sep">✦</span>
-    <span class="ticker-item">WEAR THE VOID</span><span class="ticker-sep">✦</span>
+  <div class="ticker-track">
+    <span class="ticker-item">NEW DROP 001</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">PRE-ORDER NOW OPEN</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">FREE SHIPPING OVER $150</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">KRYPTAA SS26</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">WEAR THE VOID</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">300GSM HEAVYWEIGHT DTF</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">NEW DROP 001</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">PRE-ORDER NOW OPEN</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">FREE SHIPPING OVER $150</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">KRYPTAA SS26</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">WEAR THE VOID</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">300GSM HEAVYWEIGHT DTF</span><span class="ticker-item">✦</span>
   </div>
+</div>
+
+<!-- COUNTDOWN -->
+<div class="countdown-bar">
+  <div class="cd-label">Pre-Order Closes In</div>
+  <div class="cd-timer">
+    <div class="cd-unit"><span class="cd-num" id="cdD">14</span><span class="cd-lbl">Days</span></div>
+    <span class="cd-sep">:</span>
+    <div class="cd-unit"><span class="cd-num" id="cdH">00</span><span class="cd-lbl">Hrs</span></div>
+    <span class="cd-sep">:</span>
+    <div class="cd-unit"><span class="cd-num" id="cdM">00</span><span class="cd-lbl">Min</span></div>
+    <span class="cd-sep">:</span>
+    <div class="cd-unit"><span class="cd-num" id="cdS">00</span><span class="cd-lbl">Sec</span></div>
+  </div>
+  <button class="cd-btn" onclick="document.getElementById('store').scrollIntoView({behavior:'smooth'})">Pre-Order Now →</button>
 </div>
 
 <!-- PREORDER BANNER -->
-<div style="background:linear-gradient(135deg,#7c3aed,#4c1d95);padding:14px 40px;text-align:center;position:relative;z-index:90;">
-  <span style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.25em;color:#fff;text-transform:uppercase;">⚡ Drop 001 — Pre-Order Now Open · All tees ship in 2–3 weeks · 300GSM Heavyweight DTF ⚡</span>
+<div class="preorder-banner">
+  <span>⚡ Drop 001 Open — All items ship in 2-3 weeks · 300GSM Heavyweight · DTF Print ⚡</span>
 </div>
 
-<!-- FILTER BAR -->
+<!-- FILTER + STORE -->
 <div class="filter-bar" id="store">
   <div class="filter-tabs">
-    <button class="filter-tab active" onclick="filterProducts('all', this)">All Drops</button>
-    <button class="filter-tab" onclick="filterProducts('tees', this)">T-Shirts</button>
-    <button class="filter-tab" onclick="filterProducts('pants', this)">Jeans</button>
-    <button class="filter-tab" onclick="filterProducts('accessories', this)">Accessories</button>
-  </div>
-  <select class="sort-select">
-    <option>Sort: New Arrivals</option>
-    <option>Sort: Price Low–High</option>
-    <option>Sort: Price High–Low</option>
-  </select>
-</div>
-
-<!-- STORE SECTION -->
-<section class="store-section">
-  <div class="section-header reveal">
-    <h2 class="section-title">DROP 001</h2>
-    <span class="section-count" id="productCount">6 PIECES</span>
-  </div>
-  <div class="product-grid" id="productGrid"></div>
-</section>
-
-<!-- SIZE GUIDE MODAL -->
-<div class="modal-overlay" id="sizeModal">
-  <div class="modal-box">
-    <button class="modal-close" onclick="closeSizeGuide()">✕</button>
-    <div class="modal-title">SIZE GUIDE</div>
-    <div class="modal-sub">All measurements in inches — fits are oversized unless noted</div>
-    <table class="size-table">
-      <thead>
-        <tr><th>Size</th><th>Chest</th><th>Length</th><th>Shoulder</th><th>Sleeve</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>XS</td><td>38–40"</td><td>26"</td><td>17"</td><td>32"</td></tr>
-        <tr><td>S</td><td>40–42"</td><td>27"</td><td>18"</td><td>33"</td></tr>
-        <tr><td>M</td><td>42–44"</td><td>28"</td><td>19"</td><td>34"</td></tr>
-        <tr><td>L</td><td>44–46"</td><td>29"</td><td>20"</td><td>35"</td></tr>
-        <tr><td>XL</td><td>46–48"</td><td>30"</td><td>21"</td><td>36"</td></tr>
-        <tr><td>XXL</td><td>48–50"</td><td>31"</td><td>22"</td><td>37"</td></tr>
-      </tbody>
-    </table>
-    <p class="size-note">⚠ Kryptaa pieces are intentionally oversized. If between sizes, size down.<br>Wash cold, hang dry. Do not tumble dry.</p>
+    <button class="filter-btn active" onclick="filter('all',this)">All Drops</button>
+    <button class="filter-btn" onclick="filter('tees',this)">T-Shirts</button>
+    <button class="filter-btn" onclick="filter('pants',this)">Jeans</button>
   </div>
 </div>
 
-<!-- LOOKBOOK -->
-<section class="lookbook-section" id="lookbook">
-  <div class="section-header reveal">
-    <h2 class="section-title">LOOKBOOK</h2>
-    <span class="section-count">SS25 — VOID COLLECTION</span>
+<section class="store">
+  <div class="store-header">
+    <h2 class="store-title">DROP 001</h2>
+    <span class="store-count" id="storeCount">8 PIECES</span>
   </div>
-  <div class="lookbook-grid">
-    <div class="look-item reveal">
-      <div class="look-bg" style="background:linear-gradient(135deg,#0a0a14,#141420)">
-        <svg viewBox="0 0 100 100"><path d="M30 20 L10 40 L20 45 L20 80 L80 80 L80 45 L90 40 L70 20 C70 20 62 28 50 28 C38 28 30 20 30 20Z" fill="none" stroke="white" stroke-width="1"/><line x1="50" y1="28" x2="50" y2="45" stroke="white" stroke-width="1"/></svg>
-      </div>
-      <div class="look-overlay">
-        <div class="look-tag">Look 01</div>
-        <div class="look-name">SHADOW LAYER</div>
-      </div>
-    </div>
-    <div class="look-item reveal" style="animation-delay:0.1s">
-      <div class="look-bg" style="background:linear-gradient(135deg,#0d0d0d,#1a1210)">
-        <svg viewBox="0 0 100 100"><path d="M30 20 L10 40 L25 45 L25 80 L75 80 L75 45 L90 40 L70 20 L55 30 L45 30 Z" fill="none" stroke="white" stroke-width="1"/></svg>
-      </div>
-      <div class="look-overlay">
-        <div class="look-tag">Look 02</div>
-        <div class="look-name">VOID TEE</div>
-      </div>
-    </div>
-    <div class="look-item reveal" style="animation-delay:0.15s">
-      <div class="look-bg" style="background:linear-gradient(135deg,#0c0c18,#12100c)">
-        <svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="20" rx="2" fill="none" stroke="white" stroke-width="1"/><path d="M20 40 L35 80 L50 60 L65 80 L80 40Z" fill="none" stroke="white" stroke-width="1"/></svg>
-      </div>
-      <div class="look-overlay">
-        <div class="look-tag">Look 03</div>
-        <div class="look-name">PHANTOM FIT</div>
-      </div>
-    </div>
-    <div class="look-item reveal" style="animation-delay:0.2s">
-      <div class="look-bg" style="background:linear-gradient(135deg,#0e0e14,#0a1010)">
-        <svg viewBox="0 0 100 100"><path d="M25 70 Q25 30 50 25 Q75 30 75 70Z" fill="none" stroke="white" stroke-width="1"/><line x1="20" y1="70" x2="80" y2="70" stroke="white" stroke-width="1"/></svg>
-      </div>
-      <div class="look-overlay">
-        <div class="look-tag">Look 04</div>
-        <div class="look-name">CRYPT CAP</div>
-      </div>
-    </div>
-  </div>
+  <div class="grid" id="grid"></div>
 </section>
 
 <!-- NEWSLETTER -->
-<section class="newsletter-section">
-  <div class="newsletter-tag reveal">Drop Alerts — Join the Underground</div>
-  <h2 class="newsletter-title reveal">FIRST ACCESS.<br>ALWAYS.</h2>
-  <p class="newsletter-sub reveal">Get early drop notifications, exclusive pieces & member-only discounts.</p>
-  <div class="newsletter-form reveal">
-    <input class="newsletter-input" id="emailInput" type="email" placeholder="your@email.com">
-    <button class="newsletter-btn" onclick="subscribeNewsletter()">Notify Me</button>
+<section class="newsletter" id="newsletter">
+  <div class="nl-tag">Drop Alerts — Join the Underground</div>
+  <h2 class="nl-title">FIRST ACCESS.<br>ALWAYS.</h2>
+  <p class="nl-sub">Get early drop notifications, exclusive pieces and member-only discounts.</p>
+  <div class="nl-form">
+    <input class="nl-input" id="nlEmail" type="email" placeholder="your@email.com">
+    <button class="nl-btn" onclick="subscribe()">Notify Me</button>
   </div>
-  <div class="newsletter-success" id="newsletterSuccess">✦ You're in. First drop alert incoming. ✦</div>
+  <div class="nl-ok" id="nlOk">You are in. First drop alert incoming.</div>
 </section>
 
-<!-- SHARE BAR -->
-<div class="share-bar">
-  <span class="share-label">Follow Kryptaa</span>
-  <a class="share-btn" href="https://twitter.com/Kryptaa" target="_blank">
-    <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.258 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-    @Kryptaa
-  </a>
-  <a class="share-btn" href="https://www.instagram.com/Kryptaa" target="_blank">
+<!-- FOLLOW BAR -->
+<div class="follow-bar">
+  <span class="follow-lbl">Follow Kryptaa</span>
+  <a class="follow-link" href="https://instagram.com/Kryptaa" target="_blank">
     <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
     @Kryptaa
   </a>
-  <a class="share-btn" href="https://www.facebook.com/Kryptaa" target="_blank">
+  <a class="follow-link" href="https://twitter.com/Kryptaa" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.258 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    @Kryptaa
+  </a>
+  <a class="follow-link" href="https://facebook.com/Kryptaa" target="_blank">
     <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
     @Kryptaa
   </a>
-  <button class="share-btn" onclick="copyLink()">
-    <svg viewBox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  <button class="copy-btn" onclick="copyLink()">
+    <svg viewBox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
     Copy Link
   </button>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast">Link Copied ✦</div>
-
 <!-- FOOTER -->
 <footer>
-  <div class="footer-brand">
-    <div class="logo">KRYP<span>T</span>AA</div>
-    <p>Streetwear from the underground. Every piece is limited. Every drop is a statement.</p>
-    <div style="display:flex;gap:12px;margin-top:20px;">
-      <a href="https://www.instagram.com/Kryptaa" target="_blank" style="font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.15em;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:6px 12px;transition:all 0.2s;" onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">IG</a>
-      <a href="https://twitter.com/Kryptaa" target="_blank" style="font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.15em;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:6px 12px;transition:all 0.2s;" onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">X</a>
-      <a href="https://www.facebook.com/Kryptaa" target="_blank" style="font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.15em;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:6px 12px;transition:all 0.2s;" onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">FB</a>
+  <div>
+    <img src="imgs/logo.png" alt="KRYPTAA" style="height:70px;width:auto;object-fit:contain;filter:drop-shadow(0 0 8px rgba(212,165,0,0.25));margin-bottom:12px;display:block;">
+    <p class="ft-desc">Streetwear from the underground. Every piece is limited. Every drop is a statement.</p>
+    <div class="ft-socials">
+      <a class="ft-social" href="https://instagram.com/Kryptaa" target="_blank">IG</a>
+      <a class="ft-social" href="https://twitter.com/Kryptaa" target="_blank">X</a>
+      <a class="ft-social" href="https://facebook.com/Kryptaa" target="_blank">FB</a>
     </div>
   </div>
-  <div class="footer-col">
+  <div class="ft-col">
     <h4>Navigate</h4>
     <ul>
-      <li><a href="#">New Drops</a></li>
-      <li><a href="#">T-Shirts</a></li>
-      <li><a href="#">Jeans</a></li>
-      <li><a href="#">Accessories</a></li>
-      <li><a href="#">Lookbook</a></li>
+      <li><a href="#store">New Drops</a></li>
+      <li><a href="#" onclick="filter('tees',document.querySelector('.filter-btn'));return false;">T-Shirts</a></li>
+      <li><a href="#" onclick="filter('pants',document.querySelector('.filter-btn'));return false;">Jeans</a></li>
     </ul>
   </div>
-  <div class="footer-col">
+  <div class="ft-col">
     <h4>Info</h4>
     <ul>
-      <li><a href="#">Sizing Guide</a></li>
+      <li><a href="#" onclick="openSizeGuide();return false;">Sizing Guide</a></li>
       <li><a href="#">Shipping</a></li>
       <li><a href="#">Returns</a></li>
       <li><a href="#">Contact</a></li>
-      <li><a href="#">Privacy</a></li>
     </ul>
   </div>
 </footer>
-<div class="footer-bottom">
-  <p>© 2026 Kryptaa. All rights reserved.</p>
-  <p>Wear The Void ✦</p>
+<div class="ft-bottom">
+  <p>2026 Kryptaa. All rights reserved.</p>
+  <p>Wear The Void</p>
 </div>
 
 <script>
-// Cursor
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-document.addEventListener('mousemove', e => {
-  cursor.style.left = e.clientX + 'px';
-  cursor.style.top = e.clientY + 'px';
-  setTimeout(() => {
-    ring.style.left = e.clientX + 'px';
-    ring.style.top = e.clientY + 'px';
-  }, 80);
-});
-document.querySelectorAll('a,button').forEach(el => {
-  el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
-  el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
-});
-
-// Products data
-const products = [
-  { id:1, name:'Glorious Death', category:'tees', price:58, label:'preorder', sizes:['S','M','L','XL'], color:'#0a0a0a', icon:'tee', image:'imgs/img-glorious.png', desc:'Skeleton angel rising from flames. Heavyweight 300GSM. DTF print front & back.' },
-  { id:2, name:'Crime', category:'tees', price:58, label:'preorder', sizes:['S','M','L','XL'], color:'#1a1a1a', icon:'tee', image:'imgs/img-crime.png', desc:'Cyber figure with pink brushstroke CRIME text. Dark base. Front & back DTF.' },
-  { id:3, name:'Skull Throne', category:'tees', price:58, label:'preorder', sizes:['S','M','L','XL'], color:'#0d0d0d', icon:'tee', desc:'Skull throne goddess front. Medusa logo back. 300GSM jet black. DTF print.' },
-  { id:4, name:'Angel of Death', category:'tees', price:58, label:'preorder', sizes:['S','M','L','XL'], color:'#0a0a0a', icon:'tee', image:'imgs/img-angel.png', desc:'Winged skeleton rising from hellfire. Red gothic text back. 300GSM jet black.' },
-  { id:5, name:'Need Some Money', category:'tees', price:58, label:'preorder', sizes:['S','M','L','XL'], color:'#1c1c1c', icon:'tee', image:'imgs/img-money.png', desc:'Angel + flames + fence artwork. Dark grey base. Vivid flame gradient DTF.' },
-  { id:6, name:'Broken', category:'tees', price:58, label:'preorder', sizes:['S','M','L','XL'], color:'#111111', icon:'tee', image:'imgs/img-broken.png', desc:'Skull + flames + red BROKEN text. Dark grey/black base. Sharp blood red DTF.' },
-  { id:7, name:'Kryptaa Wide-Leg Jeans — Men', category:'pants', price:95, label:'preorder', sizes:['S','M','L','XL'], color:'#0c0c14', icon:'pants', desc:'Wide-leg cut. Heavy denim. Street-ready silhouette. Ships 2–3 weeks.' },
-  { id:8, name:'Kryptaa Wide-Leg Jeans — Women', category:'pants', price:95, label:'preorder', sizes:['XS','S','M','L'], color:'#0f0f1a', icon:'pants', desc:'Wide-leg womens cut. Heavy denim. Oversized street fit. Ships 2-3 weeks.' },
+// ── PRODUCTS ──────────────────────────────────────────────
+var P = [
+  {id:1, name:"Glorious Death",  cat:"tees",  price:58, sizes:["S","M","L","XL"], img:"imgs/img-glorious.png", desc:"Skeleton angel rising from flames. 300GSM heavyweight. DTF print front and back."},
+  {id:2, name:"Crime",           cat:"tees",  price:58, sizes:["S","M","L","XL"], img:"imgs/img-crime.png",    desc:"Cyber figure with pink brushstroke text. Dark base. Front and back DTF print."},
+  {id:3, name:"Skull Throne",    cat:"tees",  price:58, sizes:["S","M","L","XL"], img:"",                      desc:"Skull throne goddess front. Medusa logo back. 300GSM jet black. DTF print."},
+  {id:4, name:"Angel of Death",  cat:"tees",  price:58, sizes:["S","M","L","XL"], img:"imgs/img-angel.png",   desc:"Winged skeleton rising from hellfire. Red gothic text back. 300GSM jet black."},
+  {id:5, name:"Need Some Money", cat:"tees",  price:58, sizes:["S","M","L","XL"], img:"imgs/img-money.png",   desc:"Angel plus flames plus fence artwork. Dark grey base. Vivid flame gradient DTF."},
+  {id:6, name:"Broken",          cat:"tees",  price:58, sizes:["S","M","L","XL"], img:"imgs/img-broken.png",  desc:"Skull plus flames plus red BROKEN text. Dark grey base. Sharp blood red DTF."},
+  {id:7, name:"Wide-Leg Jeans Men",   cat:"pants", price:95, sizes:["S","M","L","XL"],    img:"", desc:"Wide-leg cut. Heavy denim. Street-ready silhouette. Ships 2-3 weeks."},
+  {id:8, name:"Wide-Leg Jeans Women", cat:"pants", price:95, sizes:["XS","S","M","L"],    img:"", desc:"Wide-leg womens cut. Heavy denim. Oversized street fit. Ships 2-3 weeks."}
 ];
 
-const iconSVGs = {
-  hoodie: `<svg viewBox="0 0 100 100"><path d="M30 20 L10 40 L20 45 L20 80 L80 80 L80 45 L90 40 L70 20 C70 20 62 28 50 28 C38 28 30 20 30 20Z" class="hoodie-art"/><line x1="50" y1="28" x2="50" y2="45" class="hoodie-art"/></svg>`,
-  tee: `<svg viewBox="0 0 100 100"><path d="M30 20 L10 40 L25 45 L25 80 L75 80 L75 45 L90 40 L70 20 L55 30 L45 30 Z" class="tee-art"/></svg>`,
-  pants: `<svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="20" rx="2" class="tee-art"/><path d="M20 40 L35 80 L50 60 L65 80 L80 40Z" class="tee-art"/></svg>`,
-  cap: `<svg viewBox="0 0 100 100"><path d="M20 55 Q50 20 80 55 L80 65 Q50 60 20 65 Z" class="tee-art"/><line x1="10" y1="65" x2="90" y2="65" class="tee-art"/></svg>`,
-  beanie: `<svg viewBox="0 0 100 100"><path d="M25 70 Q25 30 50 25 Q75 30 75 70Z" class="tee-art"/><line x1="20" y1="70" x2="80" y2="70" class="tee-art"/></svg>`,
-  outfit: `<svg viewBox="0 0 100 100"><circle cx="50" cy="22" r="10" class="tee-art"/><path d="M30 35 Q50 45 70 35 L75 65 L60 65 L50 55 L40 65 L25 65 Z" class="tee-art"/></svg>`,
-};
+var cart = [];
+var picked = {};
 
-let cart = [];
-let activeFilter = 'all';
-
-function renderProducts(filter = 'all') {
-  const grid = document.getElementById('productGrid');
-  const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
-  document.getElementById('productCount').textContent = filtered.length + ' PIECES';
-  
-  grid.innerHTML = filtered.map((p, i) => `
-    <div class="product-card reveal" data-category="${p.category}" style="animation-delay:${i*0.05}s">
-      <div class="product-image" style="background:${p.color}">
-        <div class="img-placeholder">
-          ${p.image ? `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;object-position:center top;" alt="${p.name}">` : iconSVGs[p.icon] || iconSVGs.tee}
-        </div>
-        ${p.label === 'preorder' ? `<span class="product-label" style="background:#7c3aed;color:#fff;position:absolute;top:16px;left:16px;font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.2em;padding:4px 10px;font-weight:700;">PRE-ORDER</span>` : p.label ? `<span class="product-label label-${p.label}">${p.label === 'sold' ? 'SOLD OUT' : p.label.toUpperCase()}</span>` : ''}
-        ${p.label === 'preorder' ? `
-        <div class="product-overlay">
-          <button class="btn-add-cart" style="background:#7c3aed;" onclick="addToCart(${p.id})">Pre-Order Now</button>
-          <div style="font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.15em;color:rgba(255,255,255,0.5);text-align:center;padding:4px 0;">Ships in 2–3 weeks</div>
-        </div>` : p.label !== 'sold' ? `
-        <div class="product-overlay">
-          <button class="btn-add-cart" onclick="addToCart(${p.id})">Add to Bag</button>
-          <button class="btn-quick-view">Quick View</button>
-        </div>` : ''}
-      </div>
-      <div class="product-info">
-        <div class="product-category">${p.label === 'preorder' ? '⏳ PRE-ORDER · Ships 2–3 Weeks' : p.category}</div>
-        <div class="product-name">${p.name}</div>
-        ${p.desc ? `<div style="font-family:var(--font-mono);font-size:0.55rem;color:var(--muted);letter-spacing:0.08em;line-height:1.5;margin-bottom:8px;">${p.desc}</div>` : ''}
-        <div class="product-bottom">
-          <div class="product-price" style="${p.label==='preorder'?'color:#a78bfa':''}">$${p.price}</div>
-          <div class="product-sizes">
-            ${p.sizes.slice(0,4).map(s => `<div style="font-family:var(--font-mono);font-size:0.5rem;color:var(--muted);letter-spacing:0.1em;">${s}</div>`).join('')}
-          </div>
-        </div>
-      </div>
-    </div>
-  `).join('');
-
-  setTimeout(() => {
-    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
-  }, 50);
+// ── RENDER GRID ───────────────────────────────────────────
+function renderGrid(cat) {
+  var list = cat === "all" ? P : P.filter(function(p){return p.cat===cat;});
+  document.getElementById("storeCount").textContent = list.length + " PIECES";
+  var html = "";
+  list.forEach(function(p) {
+    var imgHtml = p.img
+      ? '<img src="' + p.img + '" alt="' + p.name + '" loading="lazy">'
+      : '<div class="card-img-placeholder">' + (p.cat==="pants" ? svgPants() : svgTee()) + '</div>';
+    html += '<div class="card">'
+      + '<div class="card-img">' + imgHtml
+      + '<span class="card-badge">PRE-ORDER</span>'
+      + '<div class="card-overlay">'
+      + '<button class="btn-preorder" onclick="addCart(' + p.id + ')">Pre-Order Now</button>'
+      + '<button class="btn-qv" onclick="openQV(' + p.id + ')">Quick View</button>'
+      + '</div></div>'
+      + '<div class="card-info">'
+      + '<div class="card-cat">Pre-Order · Ships 2-3 Wks</div>'
+      + '<div class="card-name">' + p.name + '</div>'
+      + '<div class="card-price">$' + p.price + '</div>'
+      + '</div></div>';
+  });
+  document.getElementById("grid").innerHTML = html;
 }
 
-function filterProducts(cat, btn) {
-  activeFilter = cat;
-  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  renderProducts(cat);
+function filter(cat, btn) {
+  document.querySelectorAll(".filter-btn").forEach(function(b){b.classList.remove("active");});
+  btn.classList.add("active");
+  renderGrid(cat);
 }
 
-function addToCart(id) {
-  const p = products.find(x => x.id === id);
-  if (!p || p.label === 'sold') return;
-  const existing = cart.find(x => x.id === id);
-  if (existing) existing.qty++;
-  else cart.push({ ...p, qty: 1 });
-  updateCart();
-  toggleCart(true);
-  showToast(p.label === 'preorder' ? 'Pre-Order Added ✦ Ships in 2–3 Weeks' : 'Added to Bag ✦');
+// ── SVG PLACEHOLDERS ──────────────────────────────────────
+function svgTee() {
+  return '<svg viewBox="0 0 100 100" fill="none" stroke="white" stroke-width="1.5"><path d="M30 20 L10 40 L25 45 L25 80 L75 80 L75 45 L90 40 L70 20 L55 30 L45 30 Z"/></svg>';
+}
+function svgPants() {
+  return '<svg viewBox="0 0 100 100" fill="none" stroke="white" stroke-width="1.5"><rect x="20" y="20" width="60" height="18" rx="2"/><path d="M20 38 L35 80 L50 58 L65 80 L80 38Z"/></svg>';
 }
 
-function updateCart() {
-  const count = cart.reduce((s, i) => s + i.qty, 0);
-  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  document.getElementById('cartCount').textContent = count;
-  document.getElementById('cartTotal').textContent = '$' + total;
-  
-  const container = document.getElementById('cartItems');
+// ── CART ──────────────────────────────────────────────────
+function addCart(id) {
+  var p = P.find(function(x){return x.id===id;});
+  if (!p) return;
+  var sz = picked[id] || p.sizes[0];
+  var key = id + "-" + sz;
+  var ex = cart.find(function(x){return x.key===key;});
+  if (ex) { ex.qty++; } else { cart.push({key:key, id:id, name:p.name, price:p.price, img:p.img, cat:p.cat, size:sz, qty:1}); }
+  syncCart();
+  openCart();
+  toast("Pre-Order Added — Ships 2-3 Weeks");
+}
+
+function syncCart() {
+  var count = cart.reduce(function(s,i){return s+i.qty;},0);
+  var total = cart.reduce(function(s,i){return s+i.price*i.qty;},0);
+  document.getElementById("cartBadge").textContent = count;
+  document.getElementById("cartTotalVal").textContent = "$" + total;
+  document.getElementById("stickyCnt").textContent = count + " item" + (count!==1?"s":"");
+  document.getElementById("stickyTotal").textContent = "$" + total;
+  document.getElementById("stickyBar").style.display = count > 0 ? "flex" : "none";
+
   if (cart.length === 0) {
-    container.innerHTML = `<p style="font-family:var(--font-mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.2em;text-transform:uppercase;padding-top:40px;text-align:center;">YOUR BAG IS EMPTY</p>`;
+    document.getElementById("cartList").innerHTML = '<div class="cart-empty">Your bag is empty</div>';
     return;
   }
-  container.innerHTML = cart.map(item => `
-    <div class="cart-item">
-      <div class="cart-item-img">${iconSVGs[item.icon] || iconSVGs.tee}</div>
-      <div class="cart-item-details">
-        <div class="cart-item-name">${item.name}</div>
-        <div class="cart-item-meta">${item.label === 'preorder' ? '⏳ PRE-ORDER · Ships 2–3 Weeks' : 'SIZE: M | COLOR: BLACK'}</div>
-        <div class="cart-item-qty">
-          <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
-          <span class="qty-val">${item.qty}</span>
-          <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
-        </div>
-      </div>
-      <div class="cart-item-price">$${item.price * item.qty}</div>
-    </div>
-  `).join('');
+  var h = "";
+  cart.forEach(function(item) {
+    var thumb = item.img ? '<img src="' + item.img + '" alt="' + item.name + '">' : (item.cat==="pants" ? svgPants() : svgTee());
+    h += '<div class="cart-row">'
+      + '<div class="cart-thumb">' + thumb + '</div>'
+      + '<div class="cart-info">'
+      + '<div class="cart-rname">' + item.name + '</div>'
+      + '<div class="cart-rmeta">SIZE: ' + item.size + ' · PRE-ORDER</div>'
+      + '<div class="cart-qty">'
+      + '<button class="qty-b" onclick="chQty(\'' + item.key + '\',-1)">-</button>'
+      + '<span class="qty-n">' + item.qty + '</span>'
+      + '<button class="qty-b" onclick="chQty(\'' + item.key + '\',1)">+</button>'
+      + '</div></div>'
+      + '<div class="cart-rprice">$' + (item.price*item.qty) + '</div>'
+      + '</div>';
+  });
+  document.getElementById("cartList").innerHTML = h;
 }
 
-function changeQty(id, delta) {
-  const item = cart.find(x => x.id === id);
+function chQty(key, d) {
+  var item = cart.find(function(x){return x.key===key;});
   if (!item) return;
-  item.qty += delta;
-  if (item.qty <= 0) cart = cart.filter(x => x.id !== id);
-  updateCart();
+  item.qty += d;
+  if (item.qty <= 0) cart = cart.filter(function(x){return x.key!==key;});
+  syncCart();
 }
 
-function toggleCart(open) {
-  const sidebar = document.getElementById('cartSidebar');
-  const overlay = document.getElementById('cartOverlay');
-  const isOpen = sidebar.classList.contains('open');
-  if (open === true || !isOpen) {
-    sidebar.classList.add('open');
-    overlay.classList.add('show');
-  } else {
-    sidebar.classList.remove('open');
-    overlay.classList.remove('show');
-  }
+function openCart()  { document.getElementById("cartPanel").classList.add("open"); document.getElementById("cartBg").classList.add("open"); }
+function closeCart() { document.getElementById("cartPanel").classList.remove("open"); document.getElementById("cartBg").classList.remove("open"); }
+
+// ── QUICK VIEW ────────────────────────────────────────────
+var qvActive = null;
+
+function openQV(id) {
+  qvActive = P.find(function(x){return x.id===id;});
+  if (!qvActive) return;
+  var imgHtml = qvActive.img
+    ? '<img src="' + qvActive.img + '" alt="' + qvActive.name + '" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;">'
+    : '<div class="qv-left-empty">' + (qvActive.cat==="pants"?svgPants():svgTee()) + '</div>';
+  document.getElementById("qvLeft").innerHTML = imgHtml;
+
+  var szHtml = qvActive.sizes.map(function(s) {
+    var cls = picked[qvActive.id]===s ? " picked" : "";
+    return '<button class="qv-size' + cls + '" onclick="qvPick(\'' + s + '\')">' + s + '</button>';
+  }).join("");
+
+  document.getElementById("qvRight").innerHTML =
+    '<span class="qv-badge">PRE-ORDER · Ships 2-3 Weeks</span>'
+    + '<div class="qv-name">' + qvActive.name.toUpperCase() + '</div>'
+    + '<div class="qv-price">$' + qvActive.price + '</div>'
+    + '<div class="qv-desc">' + qvActive.desc + '<br><br>300GSM Heavyweight · DTF Print · Pre-order now.</div>'
+    + '<div><div class="qv-size-title">Select Size</div><div class="qv-sizes">' + szHtml + '</div></div>'
+    + '<button class="qv-add" onclick="addCart(' + qvActive.id + ');closeQV();">Pre-Order Now — $' + qvActive.price + '</button>'
+    + '<div class="qv-note">Free shipping on orders over $150</div>';
+
+  document.getElementById("qvBg").classList.add("open");
 }
 
-// Size Guide
-function openSizeGuide() {
-  document.getElementById('sizeModal').classList.add('show');
-}
-function closeSizeGuide() {
-  document.getElementById('sizeModal').classList.remove('show');
-}
-document.getElementById('sizeModal').addEventListener('click', function(e) {
-  if (e.target === this) closeSizeGuide();
-});
-
-// Newsletter
-function subscribeNewsletter() {
-  const input = document.getElementById('emailInput');
-  if (!input.value || !input.value.includes('@')) {
-    input.style.borderColor = 'var(--accent2)';
-    setTimeout(() => input.style.borderColor = '', 1000);
-    return;
-  }
-  input.parentElement.style.display = 'none';
-  document.getElementById('newsletterSuccess').style.display = 'block';
-  showToast('You\'re on the list ✦');
+function qvPick(s) {
+  if (!qvActive) return;
+  picked[qvActive.id] = s;
+  document.querySelectorAll(".qv-size").forEach(function(b){
+    b.classList.toggle("picked", b.textContent===s);
+  });
 }
 
-// Copy link / share
+function closeQV() { document.getElementById("qvBg").classList.remove("open"); }
+document.getElementById("qvBg").addEventListener("click", function(e){ if(e.target===this) closeQV(); });
+
+// ── SIZE GUIDE ────────────────────────────────────────────
+function openSizeGuide() { document.getElementById("sizeBg").classList.add("open"); }
+function closeSizeGuide() { document.getElementById("sizeBg").classList.remove("open"); }
+document.getElementById("sizeBg").addEventListener("click", function(e){ if(e.target===this) closeSizeGuide(); });
+
+// ── NEWSLETTER ────────────────────────────────────────────
+function subscribe() {
+  var v = document.getElementById("nlEmail").value;
+  if (!v || !v.includes("@")) { document.getElementById("nlEmail").style.borderColor="var(--red)"; setTimeout(function(){document.getElementById("nlEmail").style.borderColor="";},1000); return; }
+  document.querySelector(".nl-form").style.display = "none";
+  document.getElementById("nlOk").style.display = "block";
+  toast("You are on the list");
+}
+
+// ── COPY LINK ─────────────────────────────────────────────
 function copyLink() {
-  const url = window.location.href;
-  navigator.clipboard.writeText(url).then(() => showToast('Link Copied ✦'));
+  navigator.clipboard.writeText(window.location.href).then(function(){ toast("Link Copied"); });
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
+// ── TOAST ─────────────────────────────────────────────────
+function toast(msg) {
+  var t = document.getElementById("toast");
   t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
+  t.classList.add("show");
+  setTimeout(function(){ t.classList.remove("show"); }, 2800);
 }
 
-// Update nav size guide link
-document.querySelector('.nav-links').innerHTML += '<li><a href="#" onclick="openSizeGuide();return false;">Size Guide</a></li>';
-document.querySelector('.footer-col ul li a[href="#"]:first-child') && (()=>{
-  const links = document.querySelectorAll('.footer-col ul li a');
-  links.forEach(l => { if(l.textContent === 'Sizing Guide') l.setAttribute('onclick', 'openSizeGuide();return false;'); });
-})();
+// ── COUNTDOWN ─────────────────────────────────────────────
+var end = new Date();
+end.setDate(end.getDate() + 14);
+function tick() {
+  var diff = end - new Date();
+  if (diff < 0) diff = 0;
+  var d = Math.floor(diff/86400000);
+  var h = Math.floor((diff%86400000)/3600000);
+  var m = Math.floor((diff%3600000)/60000);
+  var s = Math.floor((diff%60000)/1000);
+  document.getElementById("cdD").textContent = String(d).padStart(2,"0");
+  document.getElementById("cdH").textContent = String(h).padStart(2,"0");
+  document.getElementById("cdM").textContent = String(m).padStart(2,"0");
+  document.getElementById("cdS").textContent = String(s).padStart(2,"0");
+}
+setInterval(tick, 1000);
+tick();
 
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-// Init
-renderProducts();
+// ── INIT ──────────────────────────────────────────────────
+renderGrid("all");
 </script>
 </body>
 </html>
