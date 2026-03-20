@@ -737,13 +737,12 @@ document.querySelectorAll('a,button').forEach(function(el) {
   el.addEventListener('mouseleave', function(){ curEl.classList.remove('big'); });
 });
 
-// ── KRYPTAA BLOCK ANIMATION ──────────────────────────────
+// ── KRYPTAA RIGHT PANEL ANIMATION ───────────────────────
 (function() {
   var canvas = document.getElementById('heroCanvas');
   if (!canvas) return;
   var container = canvas.parentElement;
-  var mouse = {x: 0, y: 0};
-  var targetMouse = {x: 0, y: 0};
+  var mx = 0, my = 0, pmx = 0, pmy = 0;
 
   function resize() {
     canvas.width = container.offsetWidth;
@@ -751,202 +750,211 @@ document.querySelectorAll('a,button').forEach(function(el) {
   }
   resize();
   window.addEventListener('resize', resize);
-
   document.addEventListener('mousemove', function(e) {
-    targetMouse.x = (e.clientX / window.innerWidth - 0.5) * 2;
-    targetMouse.y = (e.clientY / window.innerHeight - 0.5) * 2;
+    mx = (e.clientX / window.innerWidth - 0.5);
+    my = (e.clientY / window.innerHeight - 0.5);
   });
 
   var ctx = canvas.getContext('2d');
-  var ACCENT = '#c8ff00';
-  var BLOCK_SIZE = 14;
-  var GAP = 2;
-  var STEP = BLOCK_SIZE + GAP;
 
-  // KRYPTAA letter definitions as pixel grids (7x9 each)
-  var FONT = {
-    'K': [[1,0,0,0,1],[1,0,0,1,0],[1,0,1,0,0],[1,1,0,0,0],[1,0,1,0,0],[1,0,0,1,0],[1,0,0,0,1]],
-    'R': [[1,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,1,1,1,0],[1,0,1,0,0],[1,0,0,1,0],[1,0,0,0,1]],
-    'Y': [[1,0,0,0,1],[1,0,0,0,1],[0,1,0,1,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0]],
-    'P': [[1,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,1,1,1,0],[1,0,0,0,0],[1,0,0,0,0],[1,0,0,0,0]],
-    'T': [[1,1,1,1,1],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0]],
-    'A': [[0,0,1,0,0],[0,1,0,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,1,1,1,1],[1,0,0,0,1],[1,0,0,0,1]]
-  };
-
-  var LETTERS = ['K','R','Y','P','T','A','A'];
-
-  // Build target block positions for KRYPTAA text
-  var targetBlocks = [];
-  var totalW = LETTERS.length * (5 * STEP + STEP);
-  var startX, startY;
-
-  function computePositions() {
-    targetBlocks = [];
-    totalW = LETTERS.length * (5 * STEP + 8);
-    startX = (canvas.width - totalW) / 2;
-    startY = (canvas.height - 7 * STEP) / 2;
-    LETTERS.forEach(function(letter, li) {
-      var grid = FONT[letter];
-      var lx = startX + li * (5 * STEP + 8);
-      for (var row = 0; row < grid.length; row++) {
-        for (var col = 0; col < grid[row].length; col++) {
-          if (grid[row][col]) {
-            targetBlocks.push({
-              tx: lx + col * STEP,
-              ty: startY + row * STEP,
-              letterIdx: li
-            });
-          }
-        }
-      }
+  // PARTICLES - 400 flowing
+  var pts = [];
+  for (var i = 0; i < 400; i++) {
+    pts.push({
+      x: Math.random() * 1600, y: Math.random() * 1200,
+      r: Math.random() * 2.2 + 0.3,
+      dx: (Math.random()-0.5)*0.5, dy: (Math.random()-0.5)*0.5,
+      o: Math.random() * 0.35 + 0.06
     });
   }
-  computePositions();
-  window.addEventListener('resize', computePositions);
 
-  // Create live blocks
+  // FALLING LINES - vertical streaks
+  var lines = [];
+  for (var i = 0; i < 24; i++) {
+    lines.push({
+      x: Math.random() * 1600,
+      y: Math.random() * -800,
+      len: 30 + Math.random() * 80,
+      speed: 1.2 + Math.random() * 2.0,
+      o: 0.08 + Math.random() * 0.2,
+      w: 0.5 + Math.random() * 1
+    });
+  }
+
+  // BLOCKS falling
   var blocks = [];
-  var TOTAL_BLOCKS = 120;
-
-  // Init blocks — some at target, some falling
-  targetBlocks.forEach(function(tb, i) {
-    var assembled = Math.random() > 0.4;
+  for (var i = 0; i < 28; i++) {
     blocks.push({
-      x: assembled ? tb.tx : Math.random() * canvas.width,
-      y: assembled ? tb.ty : -Math.random() * canvas.height,
-      tx: tb.tx, ty: tb.ty,
-      w: BLOCK_SIZE, h: BLOCK_SIZE,
-      state: assembled ? 'assembled' : 'falling',
-      speed: 0.4 + Math.random() * 0.8,
-      drift: (Math.random() - 0.5) * 0.3,
-      breakTimer: assembled ? (300 + Math.random() * 400) : 0,
-      alpha: assembled ? (0.7 + Math.random() * 0.3) : (0.15 + Math.random() * 0.25),
-      glowTimer: Math.random() * 100,
-      size: BLOCK_SIZE - Math.floor(Math.random() * 3)
-    });
-  });
-
-  // Extra floating fragments
-  for (var i = 0; i < 60; i++) {
-    blocks.push({
-      x: Math.random() * canvas.width,
-      y: -Math.random() * canvas.height * 2,
-      tx: null, ty: null,
-      w: 4 + Math.random() * 8,
-      h: 4 + Math.random() * 8,
-      state: 'floating',
-      speed: 0.2 + Math.random() * 0.6,
-      drift: (Math.random() - 0.5) * 0.4,
-      breakTimer: 0,
-      alpha: 0.08 + Math.random() * 0.18,
-      glowTimer: Math.random() * 100,
-      size: 4 + Math.floor(Math.random() * 6)
+      x: Math.random() * 1600, y: Math.random() * -600,
+      s: 5 + Math.random() * 14,
+      speed: 0.4 + Math.random() * 0.9,
+      o: 0.06 + Math.random() * 0.18,
+      solid: Math.random() > 0.5
     });
   }
 
-  var frame = 0;
-  var parallaxX = 0, parallaxY = 0;
+  var t = 0;
 
   function draw() {
-    frame++;
+    var W = canvas.width;
+    var H = canvas.height;
+    t++;
 
-    // Smooth parallax
-    parallaxX += (targetMouse.x - parallaxX) * 0.05;
-    parallaxY += (targetMouse.y - parallaxY) * 0.05;
+    pmx += (mx - pmx) * 0.05;
+    pmy += (my - pmy) * 0.05;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, W, H);
 
-    // Subtle scanlines
-    for (var sy = 0; sy < canvas.height; sy += 4) {
-      ctx.fillStyle = 'rgba(0,0,0,0.04)';
-      ctx.fillRect(0, sy, canvas.width, 1);
+    // BG
+    ctx.fillStyle = '#060608';
+    ctx.fillRect(0, 0, W, H);
+
+    // Grid
+    ctx.strokeStyle = 'rgba(200,255,0,0.03)';
+    ctx.lineWidth = 1;
+    var gs = 50;
+    var gox = ((pmx * 18) % gs + gs) % gs;
+    var goy = ((pmy * 18) % gs + gs) % gs;
+    for (var x = gox - gs; x < W + gs; x += gs) {
+      ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke();
+    }
+    for (var y = goy - gs; y < H + gs; y += gs) {
+      ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
     }
 
-    blocks.forEach(function(b) {
-      b.glowTimer++;
-      var px = parallaxX * (b.state === 'assembled' ? 8 : 20);
-      var py = parallaxY * (b.state === 'assembled' ? 4 : 12);
-
-      if (b.state === 'falling') {
-        b.y += b.speed;
-        b.x += b.drift;
-        if (b.tx !== null) {
-          var distY = b.ty - b.y;
-          if (Math.abs(distY) < 2 && Math.abs(b.x - b.tx) < 2) {
-            b.x = b.tx; b.y = b.ty;
-            b.state = 'assembled';
-            b.alpha = 0.7 + Math.random() * 0.3;
-            b.breakTimer = 200 + Math.random() * 500;
-          } else if (b.y > b.ty + 2) {
-            b.y = -20;
-            b.x = b.tx + (Math.random() - 0.5) * canvas.width * 0.3;
-          }
-        } else {
-          if (b.y > canvas.height + 20) {
-            b.y = -20;
-            b.x = Math.random() * canvas.width;
-          }
-        }
-      } else if (b.state === 'assembled') {
-        b.breakTimer--;
-        if (b.breakTimer <= 0) {
-          b.state = 'breaking';
-          b.speed = 0.3 + Math.random() * 0.5;
-          b.drift = (Math.random() - 0.5) * 1.2;
-        }
-      } else if (b.state === 'breaking') {
-        b.y += b.speed;
-        b.x += b.drift;
-        b.alpha -= 0.003;
-        if (b.alpha <= 0 || b.y > canvas.height + 20) {
-          b.y = -20;
-          b.x = b.tx + (Math.random() - 0.5) * canvas.width * 0.3;
-          b.alpha = 0.15 + Math.random() * 0.2;
-          b.state = 'falling';
-          b.speed = 0.4 + Math.random() * 0.8;
-          b.drift = (Math.random() - 0.5) * 0.3;
-        }
-      } else if (b.state === 'floating') {
-        b.y += b.speed;
-        b.x += b.drift;
-        if (b.y > canvas.height + 20) {
-          b.y = -20;
-          b.x = Math.random() * canvas.width;
-        }
-      }
-
-      var drawX = b.x + px;
-      var drawY = b.y + py;
-      var sz = b.size || b.w;
-
-      // Glow for assembled blocks
-      if (b.state === 'assembled') {
-        var glowPulse = 0.3 + Math.sin(b.glowTimer * 0.03) * 0.15;
-        ctx.shadowColor = ACCENT;
-        ctx.shadowBlur = 6 * glowPulse;
-      } else {
-        ctx.shadowBlur = 0;
-      }
-
-      // Draw block
-      var alpha = Math.max(0, Math.min(1, b.alpha));
-      if (b.state === 'assembled') {
-        ctx.fillStyle = 'rgba(200,255,0,' + alpha + ')';
-        ctx.fillRect(drawX, drawY, sz, sz);
-        // Inner highlight
-        ctx.fillStyle = 'rgba(255,255,255,0.15)';
-        ctx.fillRect(drawX + 1, drawY + 1, sz * 0.4, 2);
-      } else {
-        ctx.fillStyle = 'rgba(200,255,0,' + (alpha * 0.6) + ')';
-        ctx.fillRect(drawX, drawY, sz, sz);
-        // Outline only for falling
-        ctx.strokeStyle = 'rgba(200,255,0,' + (alpha * 0.8) + ')';
-        ctx.lineWidth = 0.5;
-        ctx.strokeRect(drawX, drawY, sz, sz);
-      }
-      ctx.shadowBlur = 0;
+    // Falling lines
+    lines.forEach(function(l) {
+      l.y += l.speed;
+      if (l.y > H + 100) { l.y = -l.len - 20; l.x = Math.random() * W; }
+      var rx = l.x + pmx * 18;
+      var ry = l.y + pmy * 10;
+      var grad = ctx.createLinearGradient(rx, ry, rx, ry + l.len);
+      grad.addColorStop(0, 'rgba(200,255,0,0)');
+      grad.addColorStop(0.5, 'rgba(200,255,0,' + l.o + ')');
+      grad.addColorStop(1, 'rgba(200,255,0,0)');
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = l.w;
+      ctx.beginPath(); ctx.moveTo(rx, ry); ctx.lineTo(rx, ry + l.len); ctx.stroke();
     });
 
+    // Falling blocks
+    blocks.forEach(function(b) {
+      b.y += b.speed;
+      if (b.y > H + 20) { b.y = -20; b.x = Math.random() * W; }
+      var rx = b.x + pmx * 14;
+      var ry = b.y + pmy * 10;
+      if (b.solid) {
+        ctx.fillStyle = 'rgba(200,255,0,' + b.o + ')';
+        ctx.fillRect(rx, ry, b.s, b.s);
+      } else {
+        ctx.strokeStyle = 'rgba(200,255,0,' + b.o + ')';
+        ctx.lineWidth = 0.8;
+        ctx.strokeRect(rx, ry, b.s, b.s);
+      }
+    });
+
+    // Particles
+    pts.forEach(function(p) {
+      p.x += p.dx; p.y += p.dy;
+      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+      var rx = p.x + pmx * 22;
+      var ry = p.y + pmy * 16;
+      if (rx < 0 || rx > W || ry < 0 || ry > H) return;
+      ctx.beginPath();
+      ctx.arc(rx, ry, p.r, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(200,255,0,' + p.o + ')';
+      ctx.fill();
+    });
+
+    // ── GIANT KRYPTAA TEXT ──
+    ctx.save();
+    ctx.translate(pmx * -10, pmy * -8);
+
+    // Measure to fit
+    var maxW = W * 0.88;
+    var fs = 10;
+    ctx.font = '900 ' + fs + 'px "Bebas Neue", sans-serif';
+    while (ctx.measureText('KRYPTAA').width < maxW && fs < 400) fs += 2;
+    fs = Math.min(fs, Math.floor(H * 0.38));
+
+    var cx = W / 2;
+    var cy = H / 2 - fs * 0.08;
+
+    // Glow halos
+    ctx.font = '900 ' + fs + 'px "Bebas Neue", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    ctx.shadowColor = '#c8ff00';
+    ctx.shadowBlur = 80;
+    ctx.fillStyle = 'rgba(200,255,0,0.04)';
+    ctx.fillText('KRYPTAA', cx, cy);
+
+    ctx.shadowBlur = 50;
+    ctx.fillStyle = 'rgba(200,255,0,0.07)';
+    ctx.fillText('KRYPTAA', cx, cy);
+
+    ctx.shadowBlur = 20;
+    ctx.fillStyle = 'rgba(200,255,0,0.1)';
+    ctx.fillText('KRYPTAA', cx, cy);
+
+    // Glitch offset flicker every ~3 seconds
+    if (t % 180 < 3) {
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = 'rgba(200,255,0,0.55)';
+      ctx.fillText('KRYPTAA', cx + 3, cy - 2);
+    }
+
+    // Main solid text
+    ctx.shadowColor = '#c8ff00';
+    ctx.shadowBlur = 14;
+    ctx.fillStyle = 'rgba(200,255,0,0.88)';
+    ctx.fillText('KRYPTAA', cx, cy);
+
+    // Stroke
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = 'rgba(200,255,0,0.15)';
+    ctx.lineWidth = 1;
+    ctx.strokeText('KRYPTAA', cx, cy);
+
+    // Tagline
+    var ts = Math.max(12, Math.min(fs * 0.09, 22));
+    ctx.font = '400 ' + ts + 'px "Space Mono", monospace';
+    ctx.shadowColor = '#c8ff00';
+    ctx.shadowBlur = 8;
+    ctx.fillStyle = 'rgba(200,255,0,0.5)';
+    ctx.letterSpacing = '0.3em';
+    ctx.fillText('DEFINED  BY  POWER', cx, cy + fs * 0.62);
+    ctx.shadowBlur = 0;
+
+    // Lines flanking tagline
+    var lw = fs * 1.3;
+    var ly = cy + fs * 0.62;
+    ctx.strokeStyle = 'rgba(200,255,0,0.2)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(cx - lw/2, ly - ts); ctx.lineTo(cx + lw/2, ly - ts); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx - lw/2, ly + ts * 1.3); ctx.lineTo(cx + lw/2, ly + ts * 1.3); ctx.stroke();
+
+    // Corner brackets
+    var pad = 14;
+    var bx1 = cx - lw/2 - pad;
+    var by1 = cy - fs * 0.56 - pad;
+    var bx2 = cx + lw/2 + pad;
+    var by2 = cy + fs * 0.72 + ts * 1.4 + pad;
+    var bl = 20;
+    ctx.strokeStyle = 'rgba(200,255,0,0.22)';
+    ctx.lineWidth = 1.5;
+    // TL
+    ctx.beginPath(); ctx.moveTo(bx1, by1+bl); ctx.lineTo(bx1,by1); ctx.lineTo(bx1+bl,by1); ctx.stroke();
+    // TR
+    ctx.beginPath(); ctx.moveTo(bx2-bl,by1); ctx.lineTo(bx2,by1); ctx.lineTo(bx2,by1+bl); ctx.stroke();
+    // BL
+    ctx.beginPath(); ctx.moveTo(bx1,by2-bl); ctx.lineTo(bx1,by2); ctx.lineTo(bx1+bl,by2); ctx.stroke();
+    // BR
+    ctx.beginPath(); ctx.moveTo(bx2-bl,by2); ctx.lineTo(bx2,by2); ctx.lineTo(bx2,by2-bl); ctx.stroke();
+
+    ctx.restore();
     requestAnimationFrame(draw);
   }
   draw();
