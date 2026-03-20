@@ -19,6 +19,14 @@
   --red: #ff3c00;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
+
+  /* CURSOR */
+  body { cursor: none; }
+  .cursor { position:fixed; width:12px; height:12px; background:var(--accent); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width 0.2s, height 0.2s; mix-blend-mode:exclusion; }
+  .cursor-ring { position:fixed; width:36px; height:36px; border:1px solid var(--accent); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:all 0.12s ease; mix-blend-mode:exclusion; opacity:0.5; }
+  .cursor.big { width:24px; height:24px; }
+  @media(max-width:768px){ body { cursor:auto; } .cursor,.cursor-ring { display:none; } }
+
 html { scroll-behavior:smooth; }
 body { background:var(--black); color:var(--white); font-family:'Barlow Condensed',sans-serif; overflow-x:hidden; }
 
@@ -40,9 +48,9 @@ nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify
 .hero-grid { position:absolute; inset:0; background-image:linear-gradient(rgba(200,255,0,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(200,255,0,0.025) 1px,transparent 1px); background-size:80px 80px; }
 .hero-content { position:relative; z-index:2; }
 .hero-tag { font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:0.3em; color:var(--accent); text-transform:uppercase; margin-bottom:14px; }
-.hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(56px,9vw,110px); line-height:0.88; margin-bottom:20px; }
+.hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(56px,9vw,110px); line-height:0.9; margin-bottom:20px; }
 .hero-title span { color:var(--accent); }
-.hero-brand { color:var(--accent); font-size:clamp(56px,9vw,110px); letter-spacing:0.08em; display:block; line-height:0.88; margin-bottom:0; }
+.hero-brand { color:var(--accent); font-size:clamp(56px,9vw,110px); letter-spacing:0.04em; display:block; line-height:0.9; margin-bottom:-4px; }
 .hero-sub { font-family:'Barlow Condensed',sans-serif; font-size:0.95rem; font-weight:300; letter-spacing:0.15em; color:var(--muted); text-transform:uppercase; margin-bottom:36px; max-width:380px; }
 .hero-btn { display:inline-block; font-family:'Space Mono',monospace; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--black); background:var(--accent); padding:15px 30px; text-decoration:none; font-weight:700; }
 .hero-btn:hover { background:var(--white); }
@@ -240,6 +248,9 @@ footer { border-top:1px solid var(--border); padding:44px 40px; display:grid; gr
 </style>
 </head>
 <body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
 
 <!-- CART BACKDROP -->
 <div class="cart-bg" id="cartBg" onclick="closeCart()"></div>
