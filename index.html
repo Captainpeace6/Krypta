@@ -737,7 +737,7 @@ document.querySelectorAll('a,button').forEach(function(el) {
   el.addEventListener('mouseleave', function(){ curEl.classList.remove('big'); });
 });
 
-// ── KRYPTAA RIGHT PANEL ANIMATION ───────────────────────
+// ── KRYPTAA NEON GLITCH ANIMATION ───────────────────────
 (function() {
   var canvas = document.getElementById('heroCanvas');
   if (!canvas) return;
@@ -756,50 +756,82 @@ document.querySelectorAll('a,button').forEach(function(el) {
   });
 
   var ctx = canvas.getContext('2d');
+  var t = 0;
 
-  // PARTICLES - 400 flowing
+  // ── 400 PARTICLES ──
   var pts = [];
   for (var i = 0; i < 400; i++) {
     pts.push({
       x: Math.random() * 1600, y: Math.random() * 1200,
-      r: Math.random() * 2.2 + 0.3,
-      dx: (Math.random()-0.5)*0.5, dy: (Math.random()-0.5)*0.5,
-      o: Math.random() * 0.35 + 0.06
+      r: Math.random() * 2.0 + 0.3,
+      dx: (Math.random()-0.5)*0.45, dy: (Math.random()-0.5)*0.45,
+      o: Math.random() * 0.32 + 0.06
     });
   }
 
-  // FALLING LINES - vertical streaks
+  // ── VERTICAL FALLING LINES ──
   var lines = [];
-  for (var i = 0; i < 24; i++) {
+  for (var i = 0; i < 30; i++) {
     lines.push({
       x: Math.random() * 1600,
-      y: Math.random() * -800,
-      len: 30 + Math.random() * 80,
-      speed: 1.2 + Math.random() * 2.0,
-      o: 0.08 + Math.random() * 0.2,
-      w: 0.5 + Math.random() * 1
+      y: Math.random() * -1000,
+      len: 40 + Math.random() * 120,
+      speed: 1.0 + Math.random() * 2.2,
+      o: 0.06 + Math.random() * 0.22,
+      w: 0.5 + Math.random() * 1.2
     });
   }
 
-  // BLOCKS falling
+  // ── FALLING BLOCKS ──
   var blocks = [];
   for (var i = 0; i < 28; i++) {
     blocks.push({
       x: Math.random() * 1600, y: Math.random() * -600,
-      s: 5 + Math.random() * 14,
-      speed: 0.4 + Math.random() * 0.9,
-      o: 0.06 + Math.random() * 0.18,
+      s: 4 + Math.random() * 12,
+      speed: 0.35 + Math.random() * 0.8,
+      o: 0.05 + Math.random() * 0.16,
       solid: Math.random() > 0.5
     });
   }
 
-  var t = 0;
+  // ── GLITCH STATE ──
+  var glitch = {
+    active: false,
+    timer: 0,
+    cooldown: 0,
+    slices: [],
+    flickerPhase: 0
+  };
+
+  function triggerGlitch() {
+    glitch.active = true;
+    glitch.timer = 8 + Math.floor(Math.random() * 12);
+    glitch.slices = [];
+    for (var i = 0; i < 5 + Math.floor(Math.random() * 6); i++) {
+      glitch.slices.push({
+        y: Math.random(),
+        h: 0.01 + Math.random() * 0.06,
+        dx: (Math.random() - 0.5) * 30,
+        o: 0.4 + Math.random() * 0.5
+      });
+    }
+    glitch.cooldown = 60 + Math.floor(Math.random() * 120);
+  }
+
+  function drawText(cx, cy, fs, alpha, offsetX, offsetY) {
+    ctx.font = '900 ' + fs + 'px "Bebas Neue", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(200,255,0,' + alpha + ')';
+    ctx.fillText('KRYPTAA', cx + offsetX, cy + offsetY);
+  }
 
   function draw() {
     var W = canvas.width;
     var H = canvas.height;
     t++;
 
+    // Smooth parallax
     pmx += (mx - pmx) * 0.05;
     pmy += (my - pmy) * 0.05;
 
@@ -830,7 +862,7 @@ document.querySelectorAll('a,button').forEach(function(el) {
       var ry = l.y + pmy * 10;
       var grad = ctx.createLinearGradient(rx, ry, rx, ry + l.len);
       grad.addColorStop(0, 'rgba(200,255,0,0)');
-      grad.addColorStop(0.5, 'rgba(200,255,0,' + l.o + ')');
+      grad.addColorStop(0.4, 'rgba(200,255,0,' + l.o + ')');
       grad.addColorStop(1, 'rgba(200,255,0,0)');
       ctx.strokeStyle = grad;
       ctx.lineWidth = l.w;
@@ -847,7 +879,7 @@ document.querySelectorAll('a,button').forEach(function(el) {
         ctx.fillStyle = 'rgba(200,255,0,' + b.o + ')';
         ctx.fillRect(rx, ry, b.s, b.s);
       } else {
-        ctx.strokeStyle = 'rgba(200,255,0,' + b.o + ')';
+        ctx.strokeStyle = 'rgba(200,255,0,' + (b.o * 1.4) + ')';
         ctx.lineWidth = 0.8;
         ctx.strokeRect(rx, ry, b.s, b.s);
       }
@@ -862,96 +894,137 @@ document.querySelectorAll('a,button').forEach(function(el) {
       var ry = p.y + pmy * 16;
       if (rx < 0 || rx > W || ry < 0 || ry > H) return;
       ctx.beginPath();
-      ctx.arc(rx, ry, p.r, 0, Math.PI*2);
+      ctx.arc(rx, ry, p.r, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(200,255,0,' + p.o + ')';
       ctx.fill();
     });
 
-    // ── GIANT KRYPTAA TEXT ──
-    ctx.save();
-    ctx.translate(pmx * -10, pmy * -8);
-
-    // Measure to fit
+    // ── TEXT SIZING ──
     var maxW = W * 0.88;
     var fs = 10;
     ctx.font = '900 ' + fs + 'px "Bebas Neue", sans-serif';
-    while (ctx.measureText('KRYPTAA').width < maxW && fs < 400) fs += 2;
-    fs = Math.min(fs, Math.floor(H * 0.38));
-
+    while (ctx.measureText('KRYPTAA').width < maxW && fs < 500) fs += 2;
+    fs = Math.min(fs, Math.floor(H * 0.40));
     var cx = W / 2;
-    var cy = H / 2 - fs * 0.08;
+    var cy = H / 2 - fs * 0.05;
 
-    // Glow halos
+    // ── GLITCH TRIGGER ──
+    if (!glitch.active) {
+      glitch.cooldown--;
+      if (glitch.cooldown <= 0) triggerGlitch();
+    }
+
+    // ── DRAW NEON SIGN ──
+    ctx.save();
+    ctx.translate(pmx * -8, pmy * -6);
+
+    // Flicker effect
+    glitch.flickerPhase += 0.12;
+    var flicker = 1.0;
+    if (glitch.active) {
+      flicker = 0.3 + Math.abs(Math.sin(glitch.flickerPhase * 8)) * 0.7;
+    } else {
+      // Subtle breathing glow
+      flicker = 0.88 + Math.sin(t * 0.018) * 0.12;
+    }
+
+    // Deep outer glow layers
     ctx.font = '900 ' + fs + 'px "Bebas Neue", sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
     ctx.shadowColor = '#c8ff00';
-    ctx.shadowBlur = 80;
-    ctx.fillStyle = 'rgba(200,255,0,0.04)';
+    ctx.shadowBlur = 90;
+    ctx.fillStyle = 'rgba(200,255,0,' + (0.04 * flicker) + ')';
     ctx.fillText('KRYPTAA', cx, cy);
 
-    ctx.shadowBlur = 50;
-    ctx.fillStyle = 'rgba(200,255,0,0.07)';
+    ctx.shadowBlur = 55;
+    ctx.fillStyle = 'rgba(200,255,0,' + (0.08 * flicker) + ')';
     ctx.fillText('KRYPTAA', cx, cy);
 
-    ctx.shadowBlur = 20;
-    ctx.fillStyle = 'rgba(200,255,0,0.1)';
+    ctx.shadowBlur = 28;
+    ctx.fillStyle = 'rgba(200,255,0,' + (0.14 * flicker) + ')';
     ctx.fillText('KRYPTAA', cx, cy);
 
-    // Glitch offset flicker every ~3 seconds
-    if (t % 180 < 3) {
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = 'rgba(200,255,0,0.55)';
-      ctx.fillText('KRYPTAA', cx + 3, cy - 2);
+    // Main text
+    ctx.shadowBlur = 12;
+    ctx.fillStyle = 'rgba(200,255,0,' + (0.92 * flicker) + ')';
+    ctx.fillText('KRYPTAA', cx, cy);
+    ctx.shadowBlur = 0;
+
+    // Thin inner white hotspot (neon tube center)
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.font = '900 ' + Math.floor(fs * 0.82) + 'px "Bebas Neue", sans-serif';
+    ctx.fillStyle = 'rgba(230,255,180,' + (0.12 * flicker) + ')';
+    ctx.shadowColor = 'rgba(230,255,180,0.6)';
+    ctx.shadowBlur = 4;
+    ctx.fillText('KRYPTAA', cx, cy);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.shadowBlur = 0;
+    ctx.font = '900 ' + fs + 'px "Bebas Neue", sans-serif';
+
+    // ── GLITCH SLICES ──
+    if (glitch.active) {
+      glitch.timer--;
+      glitch.slices.forEach(function(sl) {
+        var sy = cy - fs * 0.55 + sl.y * fs * 1.1;
+        var sh = sl.h * fs;
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(0, sy, W, sh);
+        ctx.clip();
+        // Cyan ghost slice
+        ctx.shadowColor = 'rgba(0,255,200,0.8)';
+        ctx.shadowBlur = 6;
+        ctx.fillStyle = 'rgba(0,255,200,' + (sl.o * 0.4) + ')';
+        ctx.fillText('KRYPTAA', cx + sl.dx, cy);
+        // Main offset slice
+        ctx.shadowColor = '#c8ff00';
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = 'rgba(200,255,0,' + sl.o + ')';
+        ctx.fillText('KRYPTAA', cx + sl.dx * 0.5, cy);
+        ctx.restore();
+      });
+      if (glitch.timer <= 0) {
+        glitch.active = false;
+        glitch.cooldown = 60 + Math.floor(Math.random() * 120);
+      }
     }
 
-    // Main solid text
-    ctx.shadowColor = '#c8ff00';
-    ctx.shadowBlur = 14;
-    ctx.fillStyle = 'rgba(200,255,0,0.88)';
-    ctx.fillText('KRYPTAA', cx, cy);
-
-    // Stroke
-    ctx.shadowBlur = 0;
-    ctx.strokeStyle = 'rgba(200,255,0,0.15)';
-    ctx.lineWidth = 1;
-    ctx.strokeText('KRYPTAA', cx, cy);
+    // Scanline over text area
+    for (var sy = cy - fs * 0.6; sy < cy + fs * 0.6; sy += 3) {
+      ctx.fillStyle = 'rgba(0,0,0,0.06)';
+      ctx.fillRect(cx - fs * 1.6, sy, fs * 3.2, 1);
+    }
 
     // Tagline
-    var ts = Math.max(12, Math.min(fs * 0.09, 22));
+    var ts = Math.max(11, Math.min(fs * 0.09, 20));
     ctx.font = '400 ' + ts + 'px "Space Mono", monospace';
     ctx.shadowColor = '#c8ff00';
-    ctx.shadowBlur = 8;
-    ctx.fillStyle = 'rgba(200,255,0,0.5)';
-    ctx.letterSpacing = '0.3em';
+    ctx.shadowBlur = 10;
+    ctx.fillStyle = 'rgba(200,255,0,' + (0.5 * flicker) + ')';
     ctx.fillText('DEFINED  BY  POWER', cx, cy + fs * 0.62);
     ctx.shadowBlur = 0;
 
-    // Lines flanking tagline
+    // Lines
     var lw = fs * 1.3;
-    var ly = cy + fs * 0.62;
+    var lya = cy + fs * 0.48;
+    var lyb = cy + fs * 0.62 + ts * 1.4;
     ctx.strokeStyle = 'rgba(200,255,0,0.2)';
     ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(cx - lw/2, ly - ts); ctx.lineTo(cx + lw/2, ly - ts); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(cx - lw/2, ly + ts * 1.3); ctx.lineTo(cx + lw/2, ly + ts * 1.3); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx-lw/2, lya); ctx.lineTo(cx+lw/2, lya); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx-lw/2, lyb); ctx.lineTo(cx+lw/2, lyb); ctx.stroke();
 
     // Corner brackets
-    var pad = 14;
-    var bx1 = cx - lw/2 - pad;
-    var by1 = cy - fs * 0.56 - pad;
-    var bx2 = cx + lw/2 + pad;
-    var by2 = cy + fs * 0.72 + ts * 1.4 + pad;
-    var bl = 20;
-    ctx.strokeStyle = 'rgba(200,255,0,0.22)';
+    var pad = 16;
+    var bx1 = cx - lw/2 - pad, by1 = cy - fs*0.56 - pad;
+    var bx2 = cx + lw/2 + pad, by2 = lyb + pad;
+    var bl = 22;
+    ctx.strokeStyle = 'rgba(200,255,0,0.2)';
     ctx.lineWidth = 1.5;
-    // TL
-    ctx.beginPath(); ctx.moveTo(bx1, by1+bl); ctx.lineTo(bx1,by1); ctx.lineTo(bx1+bl,by1); ctx.stroke();
-    // TR
+    ctx.beginPath(); ctx.moveTo(bx1,by1+bl); ctx.lineTo(bx1,by1); ctx.lineTo(bx1+bl,by1); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(bx2-bl,by1); ctx.lineTo(bx2,by1); ctx.lineTo(bx2,by1+bl); ctx.stroke();
-    // BL
     ctx.beginPath(); ctx.moveTo(bx1,by2-bl); ctx.lineTo(bx1,by2); ctx.lineTo(bx1+bl,by2); ctx.stroke();
-    // BR
     ctx.beginPath(); ctx.moveTo(bx2-bl,by2); ctx.lineTo(bx2,by2); ctx.lineTo(bx2,by2-bl); ctx.stroke();
 
     ctx.restore();
