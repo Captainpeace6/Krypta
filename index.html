@@ -747,14 +747,14 @@ footer { border-top:1px solid var(--border); padding:44px 40px; display:grid; gr
 <div class="cur-ring" id="curR"></div>
 
 <!-- EMAIL POPUP -->
-<div class="email-popup" id="emailPopup">
-  <div class="popup-box">
+<div class="email-popup" id="emailPopup" onclick="closeEmailPopup()">
+  <div class="popup-box" onclick="event.stopPropagation()">
     <div class="popup-acid-bar"></div>
     <div class="popup-inner">
       <button class="popup-close" onclick="closeEmailPopup()">✕</button>
-      <div class="popup-tag">Exclusive Offer</div>
-      <div class="popup-title">GET <span>10%</span><br>OFF NOW</div>
-      <div class="popup-sub">Join the void. First drop access, exclusive discounts & early releases.</div>
+      <div class="popup-tag">Drop 001 · Early Access</div>
+      <div class="popup-title">ENTER<br><span>THE VOID</span></div>
+      <div class="popup-sub">First access. No noise. Just drops.ases.</div>
       <div class="popup-form">
         <input class="popup-input" type="email" id="popupEmailInput" placeholder="YOUR EMAIL ADDRESS">
         <button class="popup-submit" onclick="submitEmailPopup()">CLAIM</button>
@@ -2162,6 +2162,14 @@ function switchSizeTab(btn, tabId) {
   document.querySelectorAll('.sm-table-wrap').forEach(function(t){ t.style.display='none'; });
   btn.classList.add('active');
   document.getElementById(tabId).style.display = '';
+}
+
+
+function closeEmailPopup() {
+  document.getElementById('emailPopup').classList.remove('open');
+}
+function openEmailPopup() {
+  document.getElementById('emailPopup').classList.add('open');
 }
 
 initStore();
