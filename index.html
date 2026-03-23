@@ -554,7 +554,7 @@ footer { border-top:1px solid var(--border); padding:44px 40px; display:grid; gr
 .how-step-title { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.08em; margin-bottom:10px; color:var(--white); }
 .how-step-desc { font-family:'Barlow Condensed',sans-serif; font-size:0.9rem; color:var(--muted); line-height:1.6; }
 .how-connector { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; color:rgba(212,165,0,0.3); padding:0 12px; flex-shrink:0; }
-@media(max-width:768px){ .how-section{padding:40px 16px;} .how-connector{transform:rotate(90deg);padding:6px 0;} .how-steps{gap:8px;} .how-step{max-width:100%;min-width:unset;width:100%;padding:20px 16px;} .how-svg{width:60px;height:60px;} .how-icon-wrap{width:68px;height:68px;} }
+@media(max-width:768px){ .how-section{padding:36px 14px;} .how-connector{display:flex;justify-content:center;padding:4px 0;} .how-connector svg{transform:rotate(90deg);} .how-steps{display:flex;flex-direction:column;gap:0;} .how-step{width:100%;box-sizing:border-box;padding:18px 14px;flex:none;min-width:0;} .how-svg{width:56px!important;height:56px!important;} .how-icon-wrap{width:64px!important;height:64px!important;overflow:hidden!important;} .how-pkg-icon{width:64px;height:64px;} } }
 
 /* ── BRAND STORY ── */
 .story-section { padding:80px 40px; background:var(--black); border-top:1px solid var(--border); }
@@ -845,6 +845,29 @@ nav { top: 28px !important; }
   .proof-bar { padding: 5px 12px; }
   nav { top: 24px !important; }
 }
+
+
+/* ── PACKAGE ICON — Step 3 How It Works ── */
+.how-pkg-icon { position:relative; width:68px; height:68px; display:flex; align-items:center; justify-content:center; }
+.pkg-box { position:relative; width:44px; height:38px; }
+.pkg-body { position:absolute; bottom:0; left:0; right:0; height:26px; background:#0d0800; border:1.5px solid #d4a500; border-radius:2px; display:flex; align-items:center; justify-content:center; }
+.pkg-label { font-family:'Space Mono',monospace; font-size:6px; letter-spacing:1px; color:#d4a500; font-weight:700; }
+.pkg-flap-l { position:absolute; top:0; left:0; width:50%; height:14px; background:#1a1000; border:1.5px solid #d4a500; border-bottom:none; transform-origin:top left; }
+.pkg-flap-r { position:absolute; top:0; right:0; width:50%; height:14px; background:#120d00; border:1.5px solid #d4a500; border-bottom:none; transform-origin:top right; }
+.pkg-tape-h { position:absolute; bottom:13px; left:0; right:0; height:1.5px; background:rgba(212,165,0,0.4); }
+.pkg-tape-v { position:absolute; top:0; bottom:0; left:50%; width:1.5px; background:rgba(212,165,0,0.4); transform:translateX(-50%); }
+.pkg-sparks { position:absolute; top:0; right:-4px; display:flex; flex-direction:column; gap:6px; }
+.pkg-spark { font-size:8px; color:#d4a500; opacity:0; }
+/* Hover animations */
+.how-step:hover .pkg-flap-l { animation:flapOpen 1.5s ease-in-out infinite; }
+.how-step:hover .pkg-flap-r { animation:flapOpen 1.5s ease-in-out infinite 0.1s; }
+.how-step:hover .pkg-body { animation:pkgBounce 1.5s ease-in-out infinite; }
+.how-step:hover .s1 { animation:sparkShow 1.5s ease-in-out infinite 0s; }
+.how-step:hover .s2 { animation:sparkShow 1.5s ease-in-out infinite 0.3s; }
+.how-step:hover .s3 { animation:sparkShow 1.5s ease-in-out infinite 0.6s; }
+@keyframes flapOpen { 0%,100%{transform:rotateX(0)} 40%{transform:rotateX(-25deg)} }
+@keyframes pkgBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+@keyframes sparkShow { 0%,60%,100%{opacity:0;transform:scale(0)} 75%{opacity:1;transform:scale(1.2)} }
 
 </style>
 </head>
@@ -1232,41 +1255,28 @@ nav { top: 28px !important; }
         </svg>
       </div>
 
-      <!-- STEP 3: Void Box / Package emerging from portal -->
+      <!-- STEP 3: Ships Mid April -->
       <div class="how-step" id="howStep3">
         <div class="how-num">03</div>
         <div class="how-icon-wrap">
-          <svg class="how-svg" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" style="overflow:hidden;">
-            <defs>
-              <filter id="boxGlow">
-                <feGaussianBlur stdDeviation="2" result="blur"/>
-                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-              </filter>
-            </defs>
-            <!-- Speed lines - static -->
-            <line x1="8" y1="32" x2="22" y2="32" stroke="#d4a500" stroke-width="1" opacity="0.25"/>
-            <line x1="6" y1="40" x2="20" y2="40" stroke="#d4a500" stroke-width="1.5" opacity="0.3"/>
-            <line x1="8" y1="48" x2="22" y2="48" stroke="#d4a500" stroke-width="1" opacity="0.25"/>
-            <!-- Box body -->
-            <rect class="how-box-body" x="22" y="28" width="36" height="30" rx="2" fill="#0d0800" stroke="#d4a500" stroke-width="1.5" filter="url(#boxGlow)"/>
-            <!-- Box top flap left -->
-            <path class="how-flap-l" d="M22,28 L22,20 L40,16 L40,28 Z" fill="#1a1000" stroke="#d4a500" stroke-width="1.2"/>
-            <!-- Box top flap right -->
-            <path class="how-flap-r" d="M58,28 L58,20 L40,16 L40,28 Z" fill="#120d00" stroke="#d4a500" stroke-width="1.2"/>
-            <!-- Tape line -->
-            <line x1="40" y1="16" x2="40" y2="58" stroke="#d4a500" stroke-width="1.5" opacity="0.5"/>
-            <line x1="22" y1="28" x2="58" y2="28" stroke="#d4a500" stroke-width="1.5" opacity="0.5"/>
-            <!-- Stars/sparkle coming off box -->
-            <circle class="how-spark-a" cx="62" cy="24" r="1.5" fill="#d4a500" opacity="0"/>
-            <circle class="how-spark-b" cx="66" cy="34" r="1" fill="#d4a500" opacity="0"/>
-            <circle class="how-spark-c" cx="63" cy="44" r="1.5" fill="#d4a500" opacity="0"/>
-            <!-- MID-APRIL text inside -->
-            <text x="40" y="48" text-anchor="middle" font-family="Space Mono" font-size="5.5" fill="#d4a500" letter-spacing="1" opacity="0.8">MID-APRIL</text>
-            <!-- Arrow indicating delivery -->
-            <path d="M15,40 L8,36 L8,44 Z" fill="#d4a500" opacity="0.4"/>
-          </svg>
+          <div class="how-pkg-icon">
+            <div class="pkg-box">
+              <div class="pkg-flap-l"></div>
+              <div class="pkg-flap-r"></div>
+              <div class="pkg-body">
+                <span class="pkg-label">APR</span>
+              </div>
+              <div class="pkg-tape-h"></div>
+              <div class="pkg-tape-v"></div>
+            </div>
+            <div class="pkg-sparks">
+              <span class="pkg-spark s1">✦</span>
+              <span class="pkg-spark s2">✦</span>
+              <span class="pkg-spark s3">✦</span>
+            </div>
+          </div>
         </div>
-        <div class="how-step-title">SHIPS MID-APRIL</div>
+        <div class="how-step-title">SHIPS MID-APRIL</div><div class="how-step-title">SHIPS MID-APRIL</div>
         <div class="how-step-desc">Your order enters the void and emerges at your door. Track it, flex it. Join the underground.</div>
       </div>
 
@@ -1456,10 +1466,7 @@ nav { top: 28px !important; }
       <div class="story-tag">The Origin</div>
       <h2 class="story-title">BORN FROM THE UNDERGROUND</h2>
       <div class="story-text">
-        <p>KRYPTAA was built by Vishwaksena — a first-generation entrepreneur who arrived with nothing but a vision and the relentless drive to create something that stands apart from everything else.</p>
-        <p>This isn't a brand that was born in a boardroom. KRYPTAA came from the streets, from late nights, from the belief that streetwear should carry meaning — power, mystery, identity. Every piece is a statement. Every drop is intentional.</p>
-        <p>The name KRYPTAA represents what moves in silence. The ones who operate without permission. Defined by power, driven by aura — this is for those who don't follow trends, they become them.</p>
-        <p>From Philadelphia to the world — KRYPTAA SS'26 is just the beginning.</p>
+        <p>KRYPTAA was built in the dark by someone who had no business building anything — and that's exactly what makes it real. Vishwaksena. First-generation. No blueprint. No permission. Just a vision sharpened by late nights and the refusal to become ordinary. This brand doesn't come from fashion — it comes from the streets, from silence, from the parts of yourself you don't explain to people who wouldn't understand anyway. KRYPTAA means what moves before it's seen. The force that doesn't ask. The energy that doesn't explain. Every piece is a statement. Every drop is war. This isn't for the ones who follow trends — it's for the ones trends follow, the ones who wear their identity like armour and walk like the world owes them nothing because they already took what was theirs. Philadelphia born. World bound. SS'26. The beginning of something you won't be able to ignore.</p>
       </div>
       <div class="story-stats">
         <div class="story-stat"><span class="story-stat-num">SS'26</span><span class="story-stat-lbl">First Drop</span></div>
