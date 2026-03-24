@@ -546,8 +546,8 @@ footer { border-top:1px solid var(--border); padding:44px 40px; display:grid; gr
 .how-inner { max-width:1100px; margin:0 auto; text-align:center; }
 .how-tag { font-family:'Space Mono',monospace; font-size:0.55rem; letter-spacing:0.28em; color:rgba(212,165,0,0.7); text-transform:uppercase; margin-bottom:10px; }
 .how-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(2rem,4vw,3.2rem); letter-spacing:0.06em; margin-bottom:50px; }
-.how-steps { display:flex; align-items:center; justify-content:center; gap:0; flex-wrap:wrap; }
-.how-step { flex:1; min-width:200px; max-width:260px; padding:28px 20px; background:var(--surface); border:1px solid var(--border); position:relative; transition:all 0.3s; }
+.how-steps { display:flex; align-items:stretch; justify-content:center; gap:0; flex-wrap:wrap; }
+.how-step { flex:1; min-width:200px; max-width:260px; padding:28px 20px; background:var(--surface); border:1px solid var(--border); position:relative; transition:all 0.3s; display:flex; flex-direction:column; align-items:center; text-align:center; box-sizing:border-box; }
 .how-step:hover { border-color:rgba(212,165,0,0.4); transform:translateY(-4px); }
 .how-num { position:absolute; top:16px; right:16px; font-family:'Bebas Neue',sans-serif; font-size:2.5rem; color:rgba(212,165,0,0.08); line-height:1; }
 .how-icon { font-size:2rem; margin-bottom:14px; display:block; }
@@ -848,7 +848,7 @@ nav { top: 28px !important; }
 
 
 /* ── PACKAGE ICON — Step 3 How It Works ── */
-.how-pkg-icon { position:relative; width:68px; height:68px; display:flex; align-items:center; justify-content:center; }
+.how-pkg-icon { position:relative; width:72px; height:72px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 .pkg-box { position:relative; width:44px; height:38px; }
 .pkg-body { position:absolute; bottom:0; left:0; right:0; height:26px; background:#0d0800; border:1.5px solid #d4a500; border-radius:2px; display:flex; align-items:center; justify-content:center; }
 .pkg-label { font-family:'Space Mono',monospace; font-size:6px; letter-spacing:1px; color:#d4a500; font-weight:700; }
@@ -1083,7 +1083,7 @@ nav { top: 28px !important; }
     <p class="hero-sub">DEFINED BY POWER. DRIVEN BY AURA.</p>
 <p class="hero-product-tag">DROP 001 — GOTHIC TEES · ANIME JEANS · TRACK PANTS · LIMITED PRE-ORDER</p>
     <blockquote class="hero-quote">
-      <p>"Born from the streets, not a boardroom.<br>Every piece is a statement. Every drop is intentional."</p>
+      <p>"From the streets, not a boardroom.<br>Every piece is a statement. Every drop is intentional."</p>
     </blockquote>
     <div class="hero-btns">
       <a href="#tees" class="hero-btn" onclick="smoothTo('tees')">Shop The Drop</a>
@@ -1276,7 +1276,7 @@ nav { top: 28px !important; }
             </div>
           </div>
         </div>
-        <div class="how-step-title">SHIPS MID-APRIL</div><div class="how-step-title">SHIPS MID-APRIL</div>
+        <div class="how-step-title">SHIPS MID-APRIL</div>
         <div class="how-step-desc">Your order enters the void and emerges at your door. Track it, flex it. Join the underground.</div>
       </div>
 
@@ -1466,7 +1466,7 @@ nav { top: 28px !important; }
       <div class="story-tag">The Origin</div>
       <h2 class="story-title">BORN FROM THE UNDERGROUND</h2>
       <div class="story-text">
-        <p>KRYPTAA was built in the dark by someone who had no business building anything — and that's exactly what makes it real. Vishwaksena. First-generation. No blueprint. No permission. Just a vision sharpened by late nights and the refusal to become ordinary. This brand doesn't come from fashion — it comes from the streets, from silence, from the parts of yourself you don't explain to people who wouldn't understand anyway. KRYPTAA means what moves before it's seen. The force that doesn't ask. The energy that doesn't explain. Every piece is a statement. Every drop is war. This isn't for the ones who follow trends — it's for the ones trends follow, the ones who wear their identity like armour and walk like the world owes them nothing because they already took what was theirs. Philadelphia born. World bound. SS'26. The beginning of something you won't be able to ignore.</p>
+        <p>KRYPTAA was built in the dark by someone who had no business building anything — and that's exactly what makes it real. Vishwaksena. First-generation. No blueprint. No permission. Just a vision sharpened by late nights and the refusal to become ordinary. This brand doesn't come from fashion — it comes from the streets, from silence, from the parts of yourself you don't explain to people who wouldn't understand anyway. KRYPTAA means what moves before it's seen. The force that doesn't ask. The energy that doesn't explain. Every piece is a statement. Every drop is war. This isn't for the ones who follow trends — it's for the ones trends follow, the ones who wear their identity like armour and walk like the world owes them nothing because they already took what was theirs. From the Philly streets to the world. SS'26. The beginning of something you won't be able to ignore.</p>
       </div>
       <div class="story-stats">
         <div class="story-stat"><span class="story-stat-num">SS'26</span><span class="story-stat-lbl">First Drop</span></div>
