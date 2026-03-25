@@ -265,7 +265,7 @@ document.getElementById('payBtn').addEventListener('click',async()=>{
     window.scrollTo({top:0,behavior:'smooth'});
   }catch(e){errEl.textContent='&#10007; Something went wrong. Please try again.';errEl.style.display='block';btn.disabled=false;txt.textContent='PAY NOW';spin.style.display='none';}
 });
-renderCart();
+window.addEventListener('load', renderCart);
 </script>
 </body>
 </html>
