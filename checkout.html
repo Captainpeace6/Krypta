@@ -227,8 +227,8 @@ function goToStripe(){
   // 'Customers choose what to pay' Stripe link.
   // Pass ?amount= in cents for exact pricing to the cent.
   // e.g. $98.50 cart → amount=9850 → Stripe charges $98.50 exactly
-  var amountInCents = Math.round(cartTotal * 100);
-  var stripeUrl = 'https://buy.stripe.com/eVqbJ0fF97fbgoC9P86wE00?amount=' + amountInCents;
+  var quantityDollars = Math.round(cartTotal);
+  var stripeUrl = 'https://buy.stripe.com/eVqbJ0fF97fbgoC9P86wE00?quantity=' + quantityDollars;
   window.location.href = stripeUrl;
 }
 
