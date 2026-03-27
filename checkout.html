@@ -118,7 +118,7 @@ footer{border-top:1px solid var(--border);padding:44px 40px;display:grid;grid-te
       <p><strong>&#128274; Redirecting to Stripe's secure payment page</strong></p>
       <p>You'll enter your card and shipping address on Stripe. The exact amount shown above will be charged.</p>
       <ul class="check-list">
-        <li><span class="ck">&#10003;</span> Correct amount charged automatically</li>
+        <li><span class="ck">&#10003;</span> Exact amount charged — to the cent</li>
         <li><span class="ck">&#10003;</span> Customer receives email receipt from Stripe</li>
         <li><span class="ck">&#10003;</span> Shipping address collected by Stripe</li>
         <li><span class="ck">&#10003;</span> Money goes directly to KRYPTAA account</li>
@@ -171,23 +171,6 @@ document.querySelectorAll('a,button').forEach(function(el){
   el.addEventListener('mouseleave',function(){cur.classList.remove('big');});
 });
 
-// ---- STRIPE PAYMENT LINKS (fixed price per link) ----
-// Cart total is matched to the closest fixed link
-var STRIPE_LINKS = [
-  { max: 78,  url: 'https://buy.stripe.com/14A00igJdarnb4i6CW6wE01' },  // $59
-  { max: 116, url: 'https://buy.stripe.com/14AdR83Wr9njgoC7H06wE02' },  // $98
-  { max: 154, url: 'https://buy.stripe.com/9B63cufF942Z6O27H06wE03' },  // $135
-  { max: 212, url: 'https://buy.stripe.com/7sY28q0Kf6b78Wa9P86wE04' },  // $175
-  { max: 99999, url: 'https://buy.stripe.com/28EdR82Snarnfky5yS6wE05' } // $250
-];
-
-function getStripeLink(total) {
-  for (var i = 0; i < STRIPE_LINKS.length; i++) {
-    if (total <= STRIPE_LINKS[i].max) return STRIPE_LINKS[i].url;
-  }
-  return STRIPE_LINKS[STRIPE_LINKS.length - 1].url;
-}
-
 function getCart(){try{return JSON.parse(localStorage.getItem('kryptaa_cart')||'[]');}catch(e){return[];}}
 var cart=getCart();
 var cartTotal=0;
@@ -228,12 +211,34 @@ function updateTotals(){
 function goToStripe(){
   if(!cart.length){alert('Your bag is empty!');return;}
   var btn=document.getElementById('payBtn');
-  btn.innerHTML='&#128274;&nbsp; Redirecting to Stripe...';
+  btn.innerHTML='&#128274;&nbsp; Processing...';
   btn.disabled=true;
+
   localStorage.setItem('kryptaa_pending_order',JSON.stringify({
     items:cart,total:cartTotal,date:new Date().toISOString()
   }));
-  window.location.href = getStripeLink(cartTotal);
+
+  // Call Netlify function to create exact Stripe Checkout Session
+  fetch('https://kryptaa-backend.netlify.app/.netlify/functions/create-checkout', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({cart:cart, total:cartTotal})
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    if(data.url){
+      window.location.href = data.url;
+    } else {
+      alert('Error: ' + (data.error || 'Could not create checkout session'));
+      btn.innerHTML='&#128274;&nbsp; PAY NOW &mdash; $'+cartTotal.toFixed(2);
+      btn.disabled=false;
+    }
+  })
+  .catch(function(err){
+    alert('Connection error. Please try again.');
+    btn.innerHTML='&#128274;&nbsp; PAY NOW &mdash; $'+cartTotal.toFixed(2);
+    btn.disabled=false;
+  });
 }
 
 renderCart();
