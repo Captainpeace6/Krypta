@@ -171,6 +171,23 @@ document.querySelectorAll('a,button').forEach(function(el){
   el.addEventListener('mouseleave',function(){cur.classList.remove('big');});
 });
 
+// ---- STRIPE PAYMENT LINKS (fixed price per link) ----
+// Cart total is matched to the closest fixed link
+var STRIPE_LINKS = [
+  { max: 78,  url: 'https://buy.stripe.com/14A00igJdarnb4i6CW6wE01' },  // $59
+  { max: 116, url: 'https://buy.stripe.com/14AdR83Wr9njgoC7H06wE02' },  // $98
+  { max: 154, url: 'https://buy.stripe.com/9B63cufF942Z6O27H06wE03' },  // $135
+  { max: 212, url: 'https://buy.stripe.com/7sY28q0Kf6b78Wa9P86wE04' },  // $175
+  { max: 99999, url: 'https://buy.stripe.com/28EdR82Snarnfky5yS6wE05' } // $250
+];
+
+function getStripeLink(total) {
+  for (var i = 0; i < STRIPE_LINKS.length; i++) {
+    if (total <= STRIPE_LINKS[i].max) return STRIPE_LINKS[i].url;
+  }
+  return STRIPE_LINKS[STRIPE_LINKS.length - 1].url;
+}
+
 function getCart(){try{return JSON.parse(localStorage.getItem('kryptaa_cart')||'[]');}catch(e){return[];}}
 var cart=getCart();
 var cartTotal=0;
@@ -199,9 +216,7 @@ function renderCart(){
 function updateTotals(){
   var sub=cart.reduce(function(s,i){return s+(i.price||0)*(i.qty||1);},0);
   var ship=cart.length?(sub>=75?0:9.99):0;
-  var exact=Math.round((sub+ship)*100)/100;
-  // Round to nearest dollar to match Stripe charge ($1/unit × quantity)
-  cartTotal=exact;
+  cartTotal=Math.round((sub+ship)*100)/100;
   document.getElementById('subtotalVal').textContent='$'+sub.toFixed(2);
   document.getElementById('shippingVal').textContent=!cart.length?'\u2014':ship===0?'FREE':'$'+ship.toFixed(2);
   document.getElementById('grandTotal').textContent='$'+cartTotal.toFixed(2);
@@ -215,21 +230,10 @@ function goToStripe(){
   var btn=document.getElementById('payBtn');
   btn.innerHTML='&#128274;&nbsp; Redirecting to Stripe...';
   btn.disabled=true;
-
-  // Save order for records
   localStorage.setItem('kryptaa_pending_order',JSON.stringify({
-    items:cart,
-    total:cartTotal,
-    date:new Date().toISOString()
+    items:cart,total:cartTotal,date:new Date().toISOString()
   }));
-
-  // ---- STRIPE TOTAL FIX ----
-  // 'Customers choose what to pay' Stripe link.
-  // Pass ?amount= in cents for exact pricing to the cent.
-  // e.g. $98.50 cart → amount=9850 → Stripe charges $98.50 exactly
-  var quantityDollars = Math.round(cartTotal);
-  var stripeUrl = 'https://buy.stripe.com/eVqbJ0fF97fbgoC9P86wE00?quantity=' + quantityDollars;
-  window.location.href = stripeUrl;
+  window.location.href = getStripeLink(cartTotal);
 }
 
 renderCart();
